@@ -1,11 +1,17 @@
 {
   "name": "speckit-marketplace",
   "description": "Isaac's Spec-Driven Development plugins",
-  "plugins": {
-    "speckit": {
-      "repository": "https://github.com/kargarisaac/speckit-plugin.git",
+  "owner": {
+    "name": "Isaac Kargar",
+    "email": "isaac@nazmito.com"
+  },
+  "plugins": [
+    {
+      "name": "speckit",
+      "source": ".",
       "description": "Spec-Driven Development framework with GitHub spec-kit + Ashpreet Bedi enhancements",
+      "version": "2.0.0",
       "tags": ["workflow", "spec-driven", "planning", "implementation"]
     }
-  }
+  ]
 }
