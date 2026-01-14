@@ -111,7 +111,7 @@ Captures the "why" behind decisions for future sessions:
 ```
 
 ### 2. **Reusable Prompts**
-**File**: `specs/###-feature/prompts.md`
+**Folder**: `specs/###-feature/prompts/`
 
 Copy-paste prompts for common tasks:
 ```markdown
@@ -183,7 +183,7 @@ your-project/
 │       ├── spec.md           # Requirements & user stories
 │       ├── CLAUDE.md         # Feature-specific instructions
 │       ├── decisions.md      # ADRs - the "why"
-│       ├── prompts.md        # Reusable prompts
+│       ├── prompts/          # Reusable prompts folder
 │       ├── plan.md           # Implementation plan
 │       ├── tasks.md          # Task list with progress
 │       ├── research.md       # Technical research
@@ -236,7 +236,7 @@ Uses structured questioning across 8 categories:
 Creates:
 - `research.md` - Technical decisions with rationale
 - `decisions.md` - ADRs for key choices
-- `prompts.md` - Reusable task prompts
+- `prompts/` - Reusable task prompts folder
 - `data-model.md` - Entities, types, relationships
 - `plan.md` - Architecture and file structure
 - `quickstart.md` - Testing procedures
