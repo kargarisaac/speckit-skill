@@ -1,0 +1,11 @@
+{
+  "name": "speckit-marketplace",
+  "description": "Isaac's Spec-Driven Development plugins",
+  "plugins": {
+    "speckit": {
+      "repository": "https://github.com/kargarisaac/speckit-plugin.git",
+      "description": "Spec-Driven Development framework with GitHub spec-kit + Ashpreet Bedi enhancements",
+      "tags": ["workflow", "spec-driven", "planning", "implementation"]
+    }
+  }
+}
