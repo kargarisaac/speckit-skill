@@ -316,7 +316,7 @@ You are generating implementation artifacts for feature: [feature name]
    - This captures the "why" for future sessions and contributors
 
 6. Generate `prompts/` folder with reusable prompts:
-   - Create `prompts/resume.md` - Resume implementation prompt
+   - Create `prompts/implement.md` - Implementation prompt
    - Create `prompts/test.md` - Test commands and debug prompts
    - Create `prompts/review.md` - Code review prompts
    - These become reusable copy-paste prompts during development
@@ -361,7 +361,7 @@ Present plan summary and wait for user approval:
 ### Generated Artifacts
 - research.md: [N] decisions documented
 - decisions.md: [N] ADRs captured (the "why" behind decisions)
-- prompts/: Reusable prompts folder (resume.md, test.md, review.md)
+- prompts/: Reusable prompts folder (implement.md, test.md, review.md)
 - data-model.md: [N] entities defined
 - plan.md: Complete technical plan
 - quickstart.md: Testing procedures
@@ -840,7 +840,7 @@ Present final summary:
 | CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Feature-specific Claude instructions |
 | research.md | Created | specs/[###-feature]/research.md | Technical research findings |
 | decisions.md | Created | specs/[###-feature]/decisions.md | ADRs - the "why" behind decisions |
-| prompts/ | Created | specs/[###-feature]/prompts/ | Reusable prompts folder (resume.md, test.md, review.md) |
+| prompts/ | Created | specs/[###-feature]/prompts/ | Reusable prompts folder (implement.md, test.md, review.md) |
 | data-model.md | Created | specs/[###-feature]/data-model.md | Entity definitions |
 | plan.md | Created | specs/[###-feature]/plan.md | Technical implementation plan |
 | quickstart.md | Created | specs/[###-feature]/quickstart.md | Testing procedures |
