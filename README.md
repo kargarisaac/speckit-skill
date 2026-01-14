@@ -330,17 +330,6 @@ Defines non-negotiable principles:
 
 All specs, plans, and implementations validate against the constitution.
 
-## The Most Important Rule
-
-**Every PR must be reviewable in under 10 minutes.**
-
-This means:
-- Max 5-7 files changed (excluding tests)
-- Max 500 lines changed
-- One focused change per PR
-
-If bigger, split into multiple PRs.
-
 ## Examples
 
 ### Example 1: Add Feature to Existing Project
