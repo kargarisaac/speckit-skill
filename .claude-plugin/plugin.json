@@ -1,0 +1,22 @@
+{
+  "name": "speckit",
+  "version": "2.0.0",
+  "description": "Spec-Driven Development framework for Claude Code. Build high-quality software with specification-first workflow, enhanced with production-tested improvements from Ashpreet Bedi.",
+  "author": {
+    "name": "Isaac Kargar",
+    "email": "isaac@nazmito.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isaackargar/speckit-plugin"
+  },
+  "keywords": [
+    "spec-driven",
+    "sdd",
+    "specification",
+    "workflow",
+    "planning",
+    "implementation",
+    "architecture"
+  ]
+}
