@@ -6,10 +6,7 @@
     "name": "Isaac Kargar",
     "email": "isaac@nazmito.com"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/isaackargar/speckit-plugin"
-  },
+  "repository": "https://github.com/kargarisaac/speckit-plugin",
   "keywords": [
     "spec-driven",
     "sdd",
