@@ -290,8 +290,8 @@ The `/sdd-flow` command orchestrates everything:
 4. **CHECKPOINT**: User approves spec
 5. **Planning**: Generate all technical documents
 6. **CHECKPOINT**: User approves plan
-7. **Task Generation**: Create `tasks.md` and implementation prompts
-8. **Ready**: All artifacts ready for `/speckit.implement`
+7. **Task Generation**: Create `tasks.md`
+8. **Ready**: All artifacts ready for `/build` or `/speckit.implement`
 
 ## Constitution File
 

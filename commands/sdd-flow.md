@@ -23,7 +23,6 @@ This command provides a single-command, interview-driven workflow that combines 
 - Auto-explores codebase with parallel subagents
 - Incremental interview (1-2 questions at a time, updates spec after each answer)
 - Checkpoint breaks for user review
-- Generates implementation prompt for handoff to another agent
 - Uses subagents for heavy tasks to avoid context compaction
 
 **Reference**: [GitHub Spec-Kit](https://github.com/github/spec-kit)
