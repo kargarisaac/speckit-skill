@@ -412,7 +412,14 @@ You are generating tasks for feature: [feature name]
    Task format: `- [ ] [TaskID] [P?] [Story] Description with file path`
    Mark parallelizable tasks with [P]
 
-4. Calculate complexity:
+   **⚠️ CRITICAL**: Every task MUST start with `- [ ]` checkbox - this is required for progress tracking!
+
+4. Validate all tasks have checkboxes:
+   - Scan generated tasks.md
+   - Ensure EVERY task line starts with `- [ ]`
+   - Fix any missing checkboxes before saving
+
+5. Calculate complexity:
    - Count total tasks across all phases
    - Estimate complexity: Low (< 10 tasks), Medium (10-25 tasks), High (> 25 tasks)
 

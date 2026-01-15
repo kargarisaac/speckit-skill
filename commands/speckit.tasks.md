@@ -52,13 +52,18 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Parallel execution examples per story
    - Implementation strategy section (MVP first, incremental delivery)
 
-5. **Report**: Output path to generated tasks.md and summary:
+5. **Validate checkboxes**: Before saving, scan the generated tasks.md and verify:
+   - Every task line starts with `- [ ]`
+   - If ANY task is missing a checkbox, FIX IT before saving
+   - This is critical for progress tracking during implementation
+
+6. **Report**: Output path to generated tasks.md and summary:
    - Total task count
    - Task count per user story
    - Parallel opportunities identified
    - Independent test criteria for each story
    - Suggested MVP scope (typically just User Story 1)
-   - Format validation: Confirm ALL tasks follow the checklist format (checkbox, ID, labels, file paths)
+   - Format validation: Confirm ALL tasks have `- [ ]` checkbox (required for `/build` and `/speckit.implement`)
 
 Context for task generation: $ARGUMENTS
 
@@ -72,6 +77,8 @@ The tasks.md should be immediately executable - each task must be specific enoug
 
 ### Checklist Format (REQUIRED)
 
+**⚠️ CRITICAL: Every task MUST have a checkbox `- [ ]` so it can be marked done during implementation!**
+
 Every task MUST strictly follow this format:
 
 ```text
@@ -80,7 +87,7 @@ Every task MUST strictly follow this format:
 
 **Format Components**:
 
-1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox)
+1. **Checkbox**: ALWAYS start with `- [ ]` (markdown checkbox) - THIS IS MANDATORY, NO EXCEPTIONS
 2. **Task ID**: Sequential number (T001, T002, T003...) in execution order
 3. **[P] marker**: Include ONLY if task is parallelizable (different files, no dependencies on incomplete tasks)
 4. **[Story] label**: REQUIRED for user story phase tasks only
