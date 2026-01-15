@@ -54,9 +54,10 @@ When resuming work on this feature:
 # Run tests for this feature
 [test command]
 
-# Start multi-agent implementation
-/speckit.implement specs/[###-feature-name]/
+# Start multi-agent implementation (recommended)
+/build specs/[###-feature-name]/
 
-# Continue from current phase
+# Or phase-by-phase implementation
+/speckit.implement phase:1
 /speckit.implement continue
 ```

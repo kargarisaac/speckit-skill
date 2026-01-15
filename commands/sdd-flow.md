@@ -450,11 +450,11 @@ Present final summary:
 
 ### Next Steps
 
-1. **Start implementation** (recommended):
+1. **Start implementation with multi-agent orchestration** (recommended):
    ```
-   /speckit.implement specs/[###-feature]/
+   /build specs/[###-feature]/
    ```
-   This uses the multi-agent architecture to implement tasks with fresh context windows.
+   Uses fresh context windows per task batch for optimal implementation.
 
 2. **Or manual phase-by-phase implementation**:
    ```

@@ -76,7 +76,8 @@ Create `.specify/memory/constitution.md` with your project's rules:
 | `/speckit.clarify` | Resolve ambiguous requirements with targeted questions |
 | `/speckit.plan` | Generate technical implementation plan (HOW to build) |
 | `/speckit.tasks` | Break down into actionable, dependency-ordered tasks |
-| `/speckit.implement` | Execute implementation using multi-agent orchestration |
+| `/speckit.implement` | Execute implementation phase-by-phase |
+| `/build` | Execute implementation using multi-agent orchestration (recommended) |
 
 ### Quality & Analysis
 
@@ -252,20 +253,31 @@ Tasks include:
 - File paths for each task
 - Progress tracking section
 
-### Phase 5: Implementation (`/speckit.implement`)
+### Phase 5: Implementation
 
-Uses **multi-agent orchestration** with fresh context per task batch:
+Two options for implementation:
+
+**Option A: `/build` (Recommended) - Multi-Agent Orchestration**
+
+Uses fresh context windows per task batch:
 - Lead agent orchestrates and tracks progress
 - Implementer subagents handle task batches with fresh context
 - Tester subagents verify after each batch
 - Browser MCP (chrome-in-claude) for UI testing
 - Dynamic batch sizing based on task complexity
 
-**Usage**:
 ```bash
-/speckit.implement specs/001-feature/    # Start fresh
-/speckit.implement --continue            # Resume from incomplete
-/speckit.implement specs/001-feature/ --phase 2  # Specific phase
+/build specs/001-feature/    # Start fresh
+/build --continue            # Resume from incomplete
+```
+
+**Option B: `/speckit.implement` - Phase-by-Phase**
+
+Manual control over each phase:
+```bash
+/speckit.implement phase:1   # Setup only
+/speckit.implement phase:2   # Foundational
+/speckit.implement continue  # Resume from incomplete
 ```
 
 ## Complete Workflow (`/sdd-flow`)
@@ -330,7 +342,7 @@ ls .specify/memory/constitution.md
 Show toast for new messages. Store in PostgreSQL."
 
 # 3. Approve checkpoints, then implement
-/speckit.implement specs/###-feature-name/
+/build specs/###-feature-name/
 ```
 
 ### Example 2: Start New Project
