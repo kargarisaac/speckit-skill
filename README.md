@@ -1,6 +1,6 @@
 # Speckit - Spec-Driven Development for Claude Code
 
-**Version**: 2.0.0
+**Version**: 2.1.0
 
 Build high-quality software faster with specification-first workflow. An enhanced version of [GitHub's spec-kit](https://github.com/github/spec-kit) with production-tested improvements from [Ashpreet Bedi's methodology](https://x.com/ashpreetbedi/status/2011220028453241218).
 
@@ -18,51 +18,24 @@ This approach emphasizes:
 
 ## Quick Start
 
-### 1. Install the Plugin
-
-**Option A: From GitHub** (recommended)
-```bash
-# In Claude Code
-/install https://github.com/yourusername/speckit-plugin
-```
-
-**Option B: Local development**
-```bash
-git clone https://github.com/yourusername/speckit-plugin
-cd speckit-plugin
-claude-install-plugin .
-```
-
-### 2. Set Up Your Project
-
-Each project needs a constitution file:
+### 1. Install
 
 ```bash
-mkdir -p .specify/memory
+# Add the marketplace
+/plugin marketplace add kargarisaac/speckit-plugin
+
+# Install the plugin
+/plugin install speckit
 ```
 
-Create `.specify/memory/constitution.md` with your project's rules:
-```markdown
-# Project Constitution
-
-## Core Principles
-- Must use TypeScript strict mode
-- Must write tests for all features
-- Must follow REST API conventions
-...
-```
-
-### 3. Build a Feature
+### 2. Build a Feature
 
 ```bash
 # Complete workflow (recommended)
 /sdd-flow "Add user authentication with OAuth2"
 
-# Or step-by-step
-/speckit.specify "Add user authentication"
-/speckit.plan
-/speckit.tasks
-/speckit.implement
+# Then implement with multi-agent orchestration
+/build specs/001-user-auth/
 ```
 
 ## Commands
