@@ -8,10 +8,7 @@
   "plugins": [
     {
       "name": "speckit",
-      "source": {
-        "source": "github",
-        "repo": "kargarisaac/speckit-plugin"
-      },
+      "source": "./",
       "description": "Spec-Driven Development framework with GitHub spec-kit + Ashpreet Bedi enhancements",
       "version": "2.1.0",
       "tags": ["workflow", "spec-driven", "planning", "implementation"]
