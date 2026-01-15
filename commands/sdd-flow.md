@@ -315,30 +315,24 @@ You are generating implementation artifacts for feature: [feature name]
    - Number ADRs sequentially (ADR-001, ADR-002, etc.)
    - This captures the "why" for future sessions and contributors
 
-6. Generate `prompts/` folder with reusable prompts:
-   - Create `prompts/implement.md` - Implementation prompt
-   - Create `prompts/test.md` - Test commands and debug prompts
-   - Create `prompts/review.md` - Code review prompts
-   - These become reusable copy-paste prompts during development
-
-8. Generate `data-model.md` with:
+6. Generate `data-model.md` with:
    - Entities extracted from spec
    - TypeScript interfaces / Python types
    - Relationships and constraints
    - State machines (if applicable)
 
-9. Fill `plan.md` template with:
+7. Fill `plan.md` template with:
    - Summary (from spec)
    - Technical Context (from codebase analysis)
    - Constitution Check (from constitution.md)
    - Project Structure (files to create/modify)
 
-10. Generate `quickstart.md` with:
-    - Step-by-step testing procedures
-    - Expected outputs for each test
-    - Troubleshooting guidance
+8. Generate `quickstart.md` with:
+   - Step-by-step testing procedures
+   - Expected outputs for each test
+   - Troubleshooting guidance
 
-11. Update feature `CLAUDE.md` with concrete file paths:
+9. Update feature `CLAUDE.md` with concrete file paths:
     - Update "Files to Modify" with actual files to change
     - Update "Files to Create" with new files to add
     - Update "Reference Implementations" with similar code patterns found
@@ -361,7 +355,6 @@ Present plan summary and wait for user approval:
 ### Generated Artifacts
 - research.md: [N] decisions documented
 - decisions.md: [N] ADRs captured (the "why" behind decisions)
-- prompts/: Reusable prompts folder (implement.md, test.md, review.md)
 - data-model.md: [N] entities defined
 - plan.md: Complete technical plan
 - quickstart.md: Testing procedures
@@ -382,7 +375,7 @@ Present plan summary and wait for user approval:
 ---
 
 **Options**:
-- **yes** / **proceed** - Generate tasks and implementation prompt
+- **yes** / **proceed** - Generate tasks
 - **edit** - Modify plan before task generation
 - **stop** - End workflow here (artifacts saved)
 ```
@@ -391,7 +384,7 @@ Wait for user response before proceeding.
 
 ---
 
-## Phase 4: Task & Prompt Generation (Subagent)
+## Phase 4: Task Generation (Subagent)
 
 After user approves plan at Checkpoint 2, launch **ONE Plan subagent** to generate tasks:
 
@@ -420,407 +413,11 @@ You are generating tasks for feature: [feature name]
    Task format: `- [ ] [TaskID] [P?] [Story] Description with file path`
    Mark parallelizable tasks with [P]
 
-4. Calculate complexity and Ralph Loop parameters:
+4. Calculate complexity:
    - Count total tasks across all phases
    - Estimate complexity: Low (< 10 tasks), Medium (10-25 tasks), High (> 25 tasks)
-   - Recommend max-iterations: Low=30, Medium=50, High=80
 
-5. Generate `IMPLEMENTATION_PROMPT.md` (see template below):
-   - Replace [ITERATIONS] with calculated max-iterations
-   - Replace [Feature Name] with actual feature name
-   - Replace [###-feature-name] with actual branch name
-   - List all success criteria from spec.md in "Completion Criteria" section
-
-6. Generate `REVIEW_PROMPT.md` (see template below)
-
-**Output**: Report task count per phase, complexity level, recommended max-iterations, MVP scope.
-```
-
-### IMPLEMENTATION_PROMPT.md Template
-
-Generate this file at `specs/[###-feature]/IMPLEMENTATION_PROMPT.md`:
-
-```markdown
-# Implementation Prompt: [Feature Name]
-
-**Generated**: [DATE]
-**Branch**: [###-feature-name]
-**Estimated Complexity**: [Low/Medium/High based on task count]
-
-Note: Use subagents where you can to keep the orchestrator's context free. Also, use parallel subagents when possible.
-
-## 🔄 Ralph Loop Usage
-
-**This prompt is optimized for Ralph Loop autonomous execution.**
-
-**Command:**
-```bash
-/ralph-loop:ralph-loop "$(cat specs/[###-feature]/IMPLEMENTATION_PROMPT.md)" --max-iterations [ITERATIONS] --completion-promise "FEATURE_COMPLETE"
-```
-
-**Max Iterations Guidance:**
-- **Low Complexity** (< 10 tasks): --max-iterations 30
-- **Medium Complexity** (10-25 tasks): --max-iterations 50
-- **High Complexity** (> 25 tasks): --max-iterations 80
-
-**Completion Signal:**
-When ALL completion criteria pass (see end of prompt), output:
-```
-<promise>FEATURE_COMPLETE</promise>
-```
-
-**Do NOT output this promise until every criterion objectively passes.**
-
-## ⚠️ CRITICAL: Progress Tracking Rules
-
-**After EACH task, you MUST immediately:**
-
-1. **Mark the task [X]** in tasks.md (change `- [ ]` to `- [x]`)
-2. **Update the Progress section** at the top of tasks.md with what you just completed
-3. **Then** proceed to the next task
-
-**The rule**: `Complete task → Mark [X] → Update Progress → Next task`
-
-**Why?** Context can reset at any time. If you don't update progress continuously, all work is lost to the next session. This is non-negotiable.
-
-**Never**: Complete multiple tasks then mark them all done later. That's how work gets lost.
-
-## Quick Context
-
-[2-3 sentence summary of what this feature does and why]
-
-## Codebase Orientation
-
-### Files to Modify
-- `path/to/file1.tsx` - [What changes needed]
-- `path/to/file2.py` - [What changes needed]
-
-### Files to Create
-- `path/to/new/file1.tsx` - [Purpose]
-- `path/to/new/file2.py` - [Purpose]
-
-### Reference Implementations
-- `path/to/similar/feature/` - Follow this pattern for [component/service]
-
-## Tech Stack (Already Determined)
-
-- **Frontend**: [from plan.md]
-- **Backend**: [from plan.md]
-- **Database**: [from plan.md]
-- **Key Libraries**: [from plan.md]
-
-## Implementation Order
-
-1. **Phase 1: Setup** - [X tasks]
-2. **Phase 2: Foundational** - [X tasks]
-3. **Phase 3: User Story 1 (MVP)** - [X tasks]
-4. **Phase 4: User Story 2** - [X tasks]
-...
-
-## Critical Constraints
-
-[From constitution.md]
-
-- [ ] Must use PostgreSQL only (no SQLite)
-- [ ] Must follow AG-UI component patterns
-- [ ] Must include backend integration tests
-- [ ] [Other project-specific constraints]
-
-## Ready-to-Run Commands
-
-```bash
-# For manual phase-by-phase implementation
-/speckit.implement phase:1
-
-# For Ralph Loop autonomous implementation (recommended)
-/ralph-loop:ralph-loop "$(cat specs/[###-feature]/IMPLEMENTATION_PROMPT.md)" --max-iterations [30-80] --completion-promise "FEATURE_COMPLETE"
-```
-
-## Self-Verification Loop (REQUIRED)
-
-**After completing EACH phase, automatically verify before proceeding:**
-
-1. **Mark phase tasks [X]** in tasks.md
-2. **Run backend tests** (if backend changes):
-   ```bash
-   uv run pytest tests/ -v
-   ```
-   - If ANY test fails: debug → fix → re-run → repeat until all pass
-
-3. **Run UI tests** (if frontend changes):
-   ```bash
-   # Start backend if not running
-   ./local_run.sh
-
-   # Use chrome-in-claude MCP tool to:
-   # - Open the UI in browser
-   # - Navigate to the new/modified feature
-   # - Interact with all UI elements
-   # - Verify: no console errors, correct rendering, proper functionality
-   # - Test edge cases from spec.md
-   ```
-   - If ANY issue found: fix → re-verify → repeat
-
-4. **Run integration tests** (if applicable):
-   ```bash
-   # Test API endpoints manually or with integration test suite
-   # Verify database changes (check PostgreSQL directly if needed)
-   # Test full user flows from spec.md user stories
-   ```
-
-5. **Only proceed to next phase** when current phase is 100% verified
-
-**Never skip verification steps. Real testing > assumptions.**
-
-## Completion Criteria
-
-**ALL of the following MUST be true before outputting completion promise:**
-
-### 1. Tasks Complete
-- [ ] All tasks in `specs/[###-feature]/tasks.md` marked [X]
-- [ ] Progress section updated with final status
-
-### 2. Backend Tests Pass (if backend changes)
-- [ ] `uv run pytest tests/` exits with 0 (all tests pass)
-- [ ] No pytest warnings or errors
-- [ ] New backend code has test coverage (aim for 80%+)
-
-### 3. UI Verification Pass (if frontend changes)
-**Using chrome-in-claude MCP tool:**
-- [ ] UI renders without errors (check browser console)
-- [ ] All interactive elements work (buttons, forms, navigation)
-- [ ] All user stories from spec.md can be completed in the UI
-- [ ] Edge cases from spec.md are handled correctly
-- [ ] Responsive design works (if applicable)
-- [ ] Accessibility: keyboard navigation works, ARIA labels present
-
-**Command:**
-```bash
-# Ensure backend is running
-./local_run.sh
-
-# Then use MCP tool to open and test:
-# mcp-cli call claude-in-chrome/navigate '{"url": "http://localhost:3000/your-feature"}'
-# mcp-cli call claude-in-chrome/read_page '{}'
-# mcp-cli call claude-in-chrome/computer '{"action": "click", ...}'
-# etc.
-```
-
-### 4. Integration Tests Pass
-- [ ] Full user flows work end-to-end (frontend → backend → database → response)
-- [ ] API endpoints return expected data
-- [ ] Database state is correct after operations
-- [ ] No unhandled errors in backend logs
-
-### 5. Success Criteria from spec.md
-- [ ] [List each SC-XXX from spec.md here]
-- [ ] All functional requirements (FR-XXX) are implemented
-- [ ] All edge cases are handled
-
-### 6. Code Quality
-- [ ] No TypeScript errors (if frontend): `npx tsc --noEmit`
-- [ ] No linting errors (if applicable)
-- [ ] No console.log or debug code left behind
-- [ ] All imports used, no dead code
-
-### 7. Documentation
-- [ ] README updated (if needed)
-- [ ] API documentation updated (if backend changes)
-- [ ] Comments added for non-obvious logic
-
----
-
-## When All Criteria Pass
-
-**Output the completion promise:**
-
-```
-<promise>FEATURE_COMPLETE</promise>
-```
-
-**If ANY criterion fails, do NOT output the promise. Instead:**
-1. Identify what failed
-2. Fix the issue
-3. Re-run verification
-4. Repeat until everything passes
-
----
-
-**Full Artifacts**: See `specs/[###-feature]/` for complete spec.md, plan.md, tasks.md
-```
-
-### REVIEW_PROMPT.md Template
-
-Generate this file at `specs/[###-feature]/REVIEW_PROMPT.md`:
-
-```markdown
-# Review Prompt: [Feature Name]
-
-**Generated**: [DATE]
-**Branch**: [###-feature-name]
-**Purpose**: Validate implementation against specification
-
-Note: Use subagents to review different aspects in parallel (UI review, backend review, test coverage review, etc.)
-
-## Your Role
-
-You are a critical code reviewer. Your job is to find gaps, issues, discrepancies, and problems between the implementation and the specification. Be thorough and skeptical.
-
-## Specification Reference
-
-**Feature Spec**: `specs/[###-feature]/spec.md`
-**Implementation Plan**: `specs/[###-feature]/plan.md`
-**Data Model**: `specs/[###-feature]/data-model.md`
-**Task List**: `specs/[###-feature]/tasks.md`
-
-## Review Checklist
-
-### 1. Requirement Coverage
-
-For EACH functional requirement in spec.md:
-- [ ] FR-001: Is it implemented? Where? Does it match the spec exactly?
-- [ ] FR-002: ...
-- [ ] [Continue for all FRs]
-
-**Report**: List any FRs that are missing, partially implemented, or deviate from spec.
-
-### 2. User Story Validation
-
-For EACH user story in spec.md:
-- [ ] US1: Do all acceptance scenarios pass? Test each Given/When/Then.
-- [ ] US2: ...
-- [ ] [Continue for all user stories]
-
-**Report**: List any acceptance scenarios that fail or behave unexpectedly.
-
-### 3. Data Model Conformance
-
-Compare implementation to data-model.md:
-- [ ] All entities exist with correct fields
-- [ ] All relationships are correctly implemented
-- [ ] All validation rules are enforced
-- [ ] All state transitions work correctly
-
-**Report**: List any entity/field mismatches, missing validations, or broken relationships.
-
-### 4. Edge Cases
-
-For EACH edge case in spec.md:
-- [ ] Is it handled? How?
-- [ ] Does the handling match the spec?
-
-**Report**: List any unhandled or incorrectly handled edge cases.
-
-### 5. Success Criteria
-
-For EACH success criterion in spec.md:
-- [ ] SC-001: Is the metric met? How was it verified?
-- [ ] SC-002: ...
-- [ ] [Continue for all SCs]
-
-**Report**: List any success criteria that are not met or cannot be verified.
-
-### 6. Constitution Compliance
-
-Check against `.specify/memory/constitution.md`:
-- [ ] Type safety enforced (TypeScript strict, Python type hints)
-- [ ] PostgreSQL only (no SQLite, CSV, in-memory)
-- [ ] Tests exist (pytest for backend)
-- [ ] React + AG-UI patterns followed (if UI)
-- [ ] Performance targets met (<500ms API, <3s dashboard load)
-- [ ] Accessibility requirements (WCAG 2.1 AA)
-
-**Report**: List any constitution violations.
-
-### 7. Code Quality Issues
-
-Look for:
-- [ ] Dead code or unused imports
-- [ ] Missing error handling
-- [ ] Security vulnerabilities (injection, XSS, etc.)
-- [ ] Performance issues (N+1 queries, unnecessary re-renders)
-- [ ] Missing or inadequate tests
-- [ ] Inconsistent naming or patterns
-
-**Report**: List all code quality issues found.
-
-### 8. Discrepancies
-
-Compare implementation to plan.md:
-- [ ] Are all files in "Files to Create" actually created?
-- [ ] Are all files in "Files to Modify" actually modified?
-- [ ] Does the project structure match the plan?
-
-**Report**: List any files missing, extra files not in plan, or structural differences.
-
-## Output Format
-
-After review, produce a report with:
-
-```markdown
-## Review Summary: [Feature Name]
-
-**Reviewer**: [Agent/Human]
-**Date**: [DATE]
-**Overall Status**: [PASS / PASS WITH ISSUES / FAIL]
-
-### Critical Issues (Must Fix)
-1. [Issue description, file path, spec reference]
-2. ...
-
-### Major Issues (Should Fix)
-1. [Issue description, file path, spec reference]
-2. ...
-
-### Minor Issues (Nice to Fix)
-1. [Issue description, file path, spec reference]
-2. ...
-
-### Gaps (Missing from Spec)
-1. [What's missing, spec reference]
-2. ...
-
-### Discrepancies (Different from Spec)
-1. [What differs, expected vs actual, spec reference]
-2. ...
-
-### Positive Observations
-1. [What was done well]
-2. ...
-
-### Recommendations
-1. [Suggested improvement]
-2. ...
-```
-
-## Verification Commands
-
-Run these to assist your review:
-
-```bash
-# Run all tests
-uv run pytest tests/ -v
-
-# Type check
-npx tsc --noEmit  # Frontend
-# or use pyright/mypy for Python
-
-# Lint check
-npm run lint  # Frontend
-# or use ruff for Python
-
-# Check for TODOs/FIXMEs
-grep -r "TODO\|FIXME\|XXX\|HACK" src/
-```
-
-## Review Approach
-
-1. **Read the spec first** - Understand what was supposed to be built
-2. **Read the implementation** - Understand what was actually built
-3. **Compare systematically** - Go through each checklist item
-4. **Be skeptical** - Assume there are bugs until proven otherwise
-5. **Be specific** - Quote file paths, line numbers, and spec references
-6. **Prioritize** - Critical > Major > Minor
+**Output**: Report task count per phase, complexity level, MVP scope.
 ```
 
 ---
@@ -840,46 +437,31 @@ Present final summary:
 | CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Feature-specific Claude instructions |
 | research.md | Created | specs/[###-feature]/research.md | Technical research findings |
 | decisions.md | Created | specs/[###-feature]/decisions.md | ADRs - the "why" behind decisions |
-| prompts/ | Created | specs/[###-feature]/prompts/ | Reusable prompts folder (implement.md, test.md, review.md) |
 | data-model.md | Created | specs/[###-feature]/data-model.md | Entity definitions |
 | plan.md | Created | specs/[###-feature]/plan.md | Technical implementation plan |
 | quickstart.md | Created | specs/[###-feature]/quickstart.md | Testing procedures |
 | tasks.md | Created | specs/[###-feature]/tasks.md | Task list with progress tracking |
-| IMPLEMENTATION_PROMPT.md | Created | specs/[###-feature]/IMPLEMENTATION_PROMPT.md | Implementation handoff |
-| REVIEW_PROMPT.md | Created | specs/[###-feature]/REVIEW_PROMPT.md | Review checklist |
 
 ### Implementation Ready
 
 **Total Tasks**: [N] tasks across [N] phases
 **MVP Scope**: Phase 3 (User Story 1) - [N] tasks
 **Complexity**: [Low/Medium/High]
-**Recommended Max Iterations**: [30/50/80]
 
 ### Next Steps
 
-1. **Review implementation prompt**:
+1. **Start implementation** (recommended):
    ```
-   Read specs/[###-feature]/IMPLEMENTATION_PROMPT.md
+   /speckit.implement specs/[###-feature]/
    ```
+   This uses the multi-agent architecture to implement tasks with fresh context windows.
 
-2. **Start implementation with Ralph Loop** (recommended):
-   ```bash
-   /ralph-loop:ralph-loop "$(cat specs/[###-feature]/IMPLEMENTATION_PROMPT.md)" --max-iterations [30-80] --completion-promise "FEATURE_COMPLETE"
-   ```
-   Ralph will autonomously implement, test, and verify until completion.
-
-3. **Or manual phase-by-phase implementation**:
+2. **Or manual phase-by-phase implementation**:
    ```
    /speckit.implement phase:1
    /speckit.implement phase:2
    # etc.
    ```
-
-4. **After implementation, run review** (new agent session):
-   ```
-   Read specs/[###-feature]/REVIEW_PROMPT.md
-   ```
-   This prompt will guide a reviewer to find gaps, issues, and discrepancies.
 
 ---
 

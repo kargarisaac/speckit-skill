@@ -2,6 +2,29 @@
 
 All notable changes to the Speckit plugin will be documented in this file.
 
+## [2.1.0] - 2026-01-15
+
+### Changed
+- **`/speckit.implement` now uses multi-agent orchestration**: Fresh context windows per task batch
+  - Lead agent orchestrates and tracks progress in tasks.md
+  - Implementer subagents handle task batches with fresh context
+  - Tester subagents verify functionality after each batch
+  - Browser MCP (chrome-in-claude/chrome-devtools) for UI testing
+  - Dynamic batch sizing based on task complexity
+  - Retry once on failure, then ask user
+
+### Removed
+- **Ralph Loop references**: All references to Ralph Loop have been removed
+- **Prompts folder generation**: `prompts/` folder with implement.md, test.md, review.md no longer generated
+- **IMPLEMENTATION_PROMPT.md**: No longer generated (replaced by multi-agent orchestration)
+- **REVIEW_PROMPT.md**: No longer generated
+- **templates/prompts-template.md**: Deleted
+
+### Migration Notes
+- The `/speckit.implement` command now takes a spec folder path: `/speckit.implement specs/001-feature/`
+- Use `--continue` flag to resume from where you left off
+- Progress is tracked in `tasks.md` (same as before)
+
 ## [2.0.0] - 2026-01-14
 
 ### Added

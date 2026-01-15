@@ -67,14 +67,7 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Add any pending decisions that need resolution during implementation
    - This captures the "why" for future sessions and contributors
 
-5. **Generate prompts folder** at `FEATURE_DIR/prompts/`:
-   - Create `prompts/implement.md` - Implementation prompt
-   - Create `prompts/test.md` - Test commands and debug prompts
-   - Create `prompts/review.md` - Code review prompts
-   - Use `${CLAUDE_PLUGIN_ROOT}/templates/prompts-template.md` as reference
-   - These become reusable copy-paste prompts during development
-
-**Output**: research.md with all NEEDS CLARIFICATION resolved, decisions.md with ADRs, prompts/ folder
+**Output**: research.md with all NEEDS CLARIFICATION resolved, decisions.md with ADRs
 
 ### Phase 1: Design & Contracts
 

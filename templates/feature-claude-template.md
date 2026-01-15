@@ -54,9 +54,9 @@ When resuming work on this feature:
 # Run tests for this feature
 [test command]
 
-# Start implementation from current phase
-/speckit.implement continue
+# Start multi-agent implementation
+/speckit.implement specs/[###-feature-name]/
 
-# Review implementation
-Read specs/[###-feature-name]/REVIEW_PROMPT.md
+# Continue from current phase
+/speckit.implement continue
 ```

@@ -76,7 +76,7 @@ Create `.specify/memory/constitution.md` with your project's rules:
 | `/speckit.clarify` | Resolve ambiguous requirements with targeted questions |
 | `/speckit.plan` | Generate technical implementation plan (HOW to build) |
 | `/speckit.tasks` | Break down into actionable, dependency-ordered tasks |
-| `/speckit.implement` | Execute implementation phase-by-phase |
+| `/speckit.implement` | Execute implementation using multi-agent orchestration |
 
 ### Quality & Analysis
 
@@ -110,18 +110,7 @@ Captures the "why" behind decisions for future sessions:
 - Con: More setup than SQLite
 ```
 
-### 2. **Reusable Prompts**
-**Folder**: `specs/###-feature/prompts/`
-
-Copy-paste prompts for common tasks:
-```markdown
-### Resume Implementation
-Read specs/###-feature/tasks.md Progress section.
-Continue from where we left off.
-Mark each task [X] immediately.
-```
-
-### 3. **Per-Feature Instructions**
+### 2. **Per-Feature Instructions**
 **File**: `specs/###-feature/CLAUDE.md`
 
 Feature-specific context for Claude:
@@ -137,7 +126,7 @@ Feature-specific context for Claude:
 - Don't break existing session handling
 ```
 
-### 4. **Progress Tracking**
+### 3. **Progress Tracking**
 **In**: `specs/###-feature/tasks.md`
 
 Survive context resets with continuous updates:
@@ -156,7 +145,7 @@ Survive context resets with continuous updates:
 2. Run integration tests
 ```
 
-### 5. **Runnable Examples (Cookbooks)**
+### 4. **Runnable Examples (Cookbooks)**
 **In**: `specs/###-feature/tasks.md`
 
 Verify each user story works:
@@ -183,7 +172,6 @@ your-project/
 │       ├── spec.md           # Requirements & user stories
 │       ├── CLAUDE.md         # Feature-specific instructions
 │       ├── decisions.md      # ADRs - the "why"
-│       ├── prompts/          # Reusable prompts folder
 │       ├── plan.md           # Implementation plan
 │       ├── tasks.md          # Task list with progress
 │       ├── research.md       # Technical research
@@ -236,7 +224,6 @@ Uses structured questioning across 8 categories:
 Creates:
 - `research.md` - Technical decisions with rationale
 - `decisions.md` - ADRs for key choices
-- `prompts/` - Reusable task prompts folder
 - `data-model.md` - Entities, types, relationships
 - `plan.md` - Architecture and file structure
 - `quickstart.md` - Testing procedures
@@ -267,18 +254,18 @@ Tasks include:
 
 ### Phase 5: Implementation (`/speckit.implement`)
 
-Executes tasks following:
-- TDD approach (tests before code)
-- Dependency ordering
-- Parallel execution where possible
-- Continuous progress tracking
+Uses **multi-agent orchestration** with fresh context per task batch:
+- Lead agent orchestrates and tracks progress
+- Implementer subagents handle task batches with fresh context
+- Tester subagents verify after each batch
+- Browser MCP (chrome-in-claude) for UI testing
+- Dynamic batch sizing based on task complexity
 
 **Usage**:
 ```bash
-/speckit.implement phase:1    # Setup only
-/speckit.implement phase:2    # Foundational
-/speckit.implement phase:3    # User Story 1
-/speckit.implement continue   # Resume from incomplete
+/speckit.implement specs/001-feature/    # Start fresh
+/speckit.implement --continue            # Resume from incomplete
+/speckit.implement specs/001-feature/ --phase 2  # Specific phase
 ```
 
 ## Complete Workflow (`/sdd-flow`)
@@ -343,9 +330,7 @@ ls .specify/memory/constitution.md
 Show toast for new messages. Store in PostgreSQL."
 
 # 3. Approve checkpoints, then implement
-/speckit.implement phase:1
-/speckit.implement phase:2
-/speckit.implement phase:3
+/speckit.implement specs/###-feature-name/
 ```
 
 ### Example 2: Start New Project
