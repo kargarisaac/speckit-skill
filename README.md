@@ -32,7 +32,7 @@ Use speckit sdd-flow for: Add user authentication with OAuth2
 Implementation is sequential by default:
 
 ```text
-Use build for specs/001-user-auth/
+Use speckit build for specs/001-user-auth/
 ```
 
 Feature context is written to `specs/###-feature/AGENTS.md`.
@@ -44,7 +44,7 @@ Feature context is written to `specs/###-feature/AGENTS.md`.
 - `speckit.clarify` — resolve ambiguities
 - `speckit.plan` — generate implementation plan
 - `speckit.tasks` — generate tasks
-- `build` — execute implementation phase-by-phase (sequential in skill mode)
+- `build` — execute implementation phase-by-phase (sequential in codex, parallel in claude)
 - `speckit.analyze` — cross-artifact analysis
 - `speckit.checklist` — requirements quality checklist
 - `speckit.taskstoissues` — GitHub issues from tasks
@@ -63,7 +63,7 @@ your-project/
 │       ├── data-model.md
 │       ├── quickstart.md
 │       └── AGENTS.md
-└── AGENTS.md
+└── AGENTS.md or CLAUDE.md
 ```
 
 ## License
