@@ -111,7 +111,6 @@ After subagents complete:
 
 - Load `${SPECKIT_ROOT}/assets/templates/spec-template.md`
 - Load `${SPECKIT_ROOT}/assets/templates/feature-agents-template.md`
-- Load `.specify/memory/constitution.md`
 
 ### Step 1.5: Synthesize & Report to User
 
@@ -185,8 +184,8 @@ Interview about **ALL** of these areas, not just technical ones:
 
 **AVOID obvious questions like:**
 - "What should the button say?" (can infer from feature description)
-- "Should we use TypeScript?" (already in constitution.md)
-- "What database should we use?" (already PostgreSQL per constitution)
+- "Should we use TypeScript?" (if already specified in repo conventions)
+- "What database should we use?" (if already defined in repo docs)
 
 **ASK non-obvious questions like:**
 - "The codebase has two state patterns (Context in Dashboard, local state in Composer). Which fits this feature's data sharing needs?"
@@ -300,7 +299,7 @@ You are generating implementation artifacts for feature: [feature name]
 **Tasks:**
 1. Run `${SPECKIT_ROOT}/scripts/setup-plan.sh --json` and parse output
 2. Load the spec at FEATURE_SPEC path
-3. Load `.specify/memory/constitution.md` for project constraints
+3. Load any explicit project constraints from repo docs if present
 
 4. Generate `research.md` with:
    - Technical decisions made (from interview)
@@ -323,7 +322,6 @@ You are generating implementation artifacts for feature: [feature name]
 7. Fill `plan.md` template with:
    - Summary (from spec)
    - Technical Context (from codebase analysis)
-   - Constitution Check (from constitution.md)
    - Project Structure (files to create/modify)
 
 8. Generate `quickstart.md` with:

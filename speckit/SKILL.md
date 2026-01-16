@@ -1,6 +1,6 @@
 ---
 name: speckit
-description: Spec-driven development workflow (Speckit) for generating and maintaining feature specs, plans, tasks, checklists, and implementation guidance in repos that use specs/###-feature directories and .specify/memory/constitution.md. Use when requests mention sdd-flow or speckit commands (specify, clarify, plan, tasks, implement, analyze, checklist, constitution, taskstoissues) or ask for spec-first planning and build orchestration.
+description: Spec-driven development workflow (Speckit) for generating and maintaining feature specs, plans, tasks, checklists, and implementation guidance in repos that use specs/###-feature directories. Use when requests mention sdd-flow or speckit commands (specify, clarify, plan, tasks, implement, analyze, checklist, taskstoissues) or ask for spec-first planning and build orchestration.
 ---
 
 # Speckit spec-driven development
@@ -8,13 +8,12 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 ## Set the skill root
 
 - Resolve the repo root (use `git rev-parse --show-toplevel` or the current working directory).
-- Set `SPECKIT_ROOT="$REPO_ROOT/.codex/skills/speckit"` and export `SPECKIT_ROOT` so scripts and templates resolve.
+- Set `SPECKIT_ROOT` to the absolute path of the `speckit/` folder so scripts and templates resolve.
 - Use `scripts/` and `assets/templates/` from this skill directory.
 
 ## Core artifacts
 
 - Keep specs in `specs/###-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, `decisions.md`, `research.md`, `data-model.md`, `quickstart.md`, `AGENTS.md`, and optional `contracts/`.
-- Ensure `.specify/memory/constitution.md` exists and governs outputs.
 
 ## Workflow map
 
@@ -28,7 +27,6 @@ description: Spec-driven development workflow (Speckit) for generating and maint
   - `references/speckit.checklist.md`
   - `references/speckit.implement.md`
   - `references/build.md`
-  - `references/speckit.constitution.md`
   - `references/speckit.taskstoissues.md`
 
 ## Adaptations for Codex

@@ -22,18 +22,17 @@ You **MUST** consider the user input before proceeding (if not empty).
 
 1. **Setup**: Run `${SPECKIT_ROOT}/scripts/setup-plan.sh --json` from repo root and parse JSON for FEATURE_SPEC, IMPL_PLAN, SPECS_DIR, BRANCH. For single quotes in args like "I'm Groot", use escape syntax: e.g 'I'\''m Groot' (or double-quote if possible: "I'm Groot").
 
-2. **Load context**: Read FEATURE_SPEC and `.specify/memory/constitution.md`. Load IMPL_PLAN template (already copied).
+2. **Load context**: Read FEATURE_SPEC. Load IMPL_PLAN template (already copied).
 
 3. **Execute plan workflow**: Follow the structure in IMPL_PLAN template to:
    - Fill Technical Context (mark unknowns as "NEEDS CLARIFICATION")
-   - Fill Constitution Check section from constitution
-   - Evaluate gates (ERROR if violations unjustified)
+   - Evaluate any explicit constraints in the spec (ERROR if violations unjustified)
    - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
    - Phase 0: Generate decisions.md (capture ADRs from research decisions)
    - Phase 1: Generate data-model.md, contracts/, quickstart.md
    - Phase 1: Update feature AGENTS.md with concrete file paths
    - Phase 1: Update agent context by running the agent script
-   - Re-evaluate Constitution Check post-design
+   - Re-evaluate constraints post-design
 
 4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts including decisions.md and updated AGENTS.md.
 

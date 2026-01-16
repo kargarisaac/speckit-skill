@@ -48,14 +48,12 @@ Feature context is written to `specs/###-feature/AGENTS.md`.
 - `build` — orchestration (sequential in skill mode)
 - `speckit.analyze` — cross-artifact analysis
 - `speckit.checklist` — requirements quality checklist
-- `speckit.constitution` — project principles
 - `speckit.taskstoissues` — GitHub issues from tasks
 
 ## Output Structure
 
 ```
 your-project/
-├── .specify/memory/constitution.md
 ├── specs/
 │   └── ###-feature-name/
 │       ├── spec.md
