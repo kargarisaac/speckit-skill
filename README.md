@@ -1,380 +1,73 @@
-# Speckit - Spec-Driven Development for Claude Code
+# Speckit — Spec-Driven Development Skill
 
-**Version**: 2.1.0
+Build high-quality software faster with a specification-first workflow. Speckit is based on [GitHub's spec-kit](https://github.com/github/spec-kit) with modifications and production-tested improvements from [Ashpreet Bedi's methodology](https://x.com/ashpreetbedi/status/2011220028453241218).
 
-Build high-quality software faster with specification-first workflow. An enhanced version of [GitHub's spec-kit](https://github.com/github/spec-kit) with production-tested improvements from [Ashpreet Bedi's methodology](https://x.com/ashpreetbedi/status/2011220028453241218). Includes a Codex skill in `.codex/skills/speckit` and a Claude Code plugin.
+## What You Get
 
-## What is Spec-Driven Development?
+- Spec-first flow: clarify → plan → tasks → implement
+- ADRs (`decisions.md`) to capture the "why"
+- Progress tracking in `tasks.md` for session continuity
+- Quality analysis and checklists for spec readiness
 
-Spec-Driven Development flips traditional software development:
-- **Before**: Code first, spec later (if at all)
-- **After**: Spec first, then generate working code from specifications
+## Install the Skill
 
-This approach emphasizes:
-- ✅ **Intent-driven development** - Define WHAT before HOW
-- ✅ **Rich specifications** - Detailed requirements and user stories
-- ✅ **Multi-step refinement** - Clarify → Plan → Task → Implement
-- ✅ **AI-powered generation** - Let AI handle implementation details
-
-## Quick Start
-
-### 1. Install (Claude Code plugin)
+Copy or symlink `speckit/` into your tool's skill directory:
 
 ```bash
-# Add the marketplace
-/plugin marketplace add kargarisaac/speckit-plugin
+# Codex
+ln -s "$(pwd)/speckit" ~/.codex/skills/speckit
 
-# Install the plugin
-/plugin install speckit
+# Claude Code
+ln -s "$(pwd)/speckit" ~/.claude/skills/speckit
 ```
 
-### 2. Build a Feature (Claude Code plugin)
+For other tools (opencode, etc.), place `speckit/` in their supported skills directory.
 
-```bash
-# Complete workflow (recommended)
-/sdd-flow "Add user authentication with OAuth2"
-
-# Then implement with multi-agent orchestration
-/build specs/001-user-auth/
-```
-
-## Commands
-
-## Codex Skill (Sequential)
-
-This repo now ships a Codex skill in `.codex/skills/speckit`. Codex will load it automatically when you work inside this repo.
-
-### Use the Skill
+## Usage
 
 ```text
 Use speckit sdd-flow for: Add user authentication with OAuth2
 ```
 
-Codex will run the same workflow as `/sdd-flow`, but sequentially (no subagents). For implementation, use:
+Implementation is sequential by default:
 
 ```text
 Use speckit.implement for specs/001-user-auth/
 ```
 
-The skill writes feature context to `specs/###-feature/AGENTS.md` (Codex-friendly). The Claude Code plugin still uses `CLAUDE.md`.
+Feature context is written to `specs/###-feature/AGENTS.md`.
 
-### Core Workflow
+## Command Index
 
-| Command | Description |
-|---------|-------------|
-| `/sdd-flow "description"` | **Complete workflow**: Explore codebase → Interview → Specify → Plan → Tasks |
-| `/speckit.specify` | Create feature specification (WHAT to build) |
-| `/speckit.clarify` | Resolve ambiguous requirements with targeted questions |
-| `/speckit.plan` | Generate technical implementation plan (HOW to build) |
-| `/speckit.tasks` | Break down into actionable, dependency-ordered tasks |
-| `/speckit.implement` | Execute implementation phase-by-phase |
-| `/build` | Execute implementation using multi-agent orchestration (recommended) |
+- `sdd-flow "description"` — complete workflow
+- `speckit.specify` — create spec
+- `speckit.clarify` — resolve ambiguities
+- `speckit.plan` — generate implementation plan
+- `speckit.tasks` — generate tasks
+- `speckit.implement` — execute tasks
+- `build` — orchestration (sequential in skill mode)
+- `speckit.analyze` — cross-artifact analysis
+- `speckit.checklist` — requirements quality checklist
+- `speckit.constitution` — project principles
+- `speckit.taskstoissues` — GitHub issues from tasks
 
-### Quality & Analysis
-
-| Command | Description |
-|---------|-------------|
-| `/speckit.analyze` | Cross-artifact consistency analysis |
-| `/speckit.checklist` | Generate quality validation checklists |
-| `/speckit.constitution` | Create/update project governing principles |
-
-### Utilities
-
-| Command | Description |
-|---------|-------------|
-| `/speckit.taskstoissues` | Convert tasks to GitHub issues |
-
-## Enhanced Features
-
-This plugin includes production-tested enhancements from Ashpreet Bedi:
-
-### 1. **Architectural Decision Records (ADRs)**
-**File**: `specs/###-feature/decisions.md`
-
-Captures the "why" behind decisions for future sessions:
-```markdown
-## ADR-001: Database Choice
-**Context**: Need persistent storage for user data
-**Options**: PostgreSQL, MongoDB, SQLite
-**Decision**: PostgreSQL
-**Consequences**:
-- Pro: ACID compliance, mature ecosystem
-- Con: More setup than SQLite
-```
-
-### 2. **Per-Feature Instructions**
-**File**: `specs/###-feature/CLAUDE.md`
-
-Feature-specific context for Claude:
-```markdown
-# CLAUDE.md — User Authentication
-
-## Files to Modify
-- `src/auth/login.ts` - Add OAuth2 flow
-- `src/routes/auth.ts` - New endpoints
-
-## Don't
-- Don't add features not in spec.md
-- Don't break existing session handling
-```
-
-### 3. **Progress Tracking**
-**In**: `specs/###-feature/tasks.md`
-
-Survive context resets with continuous updates:
-```markdown
-## Progress (Session Continuity)
-
-### What's Done
-- Phase 1: Complete (T001-T003)
-- T004: Created database schema
-
-### Currently In Progress
-- T005: Implementing OAuth2 flow
-
-### Next Session Should
-1. Complete T005 if incomplete
-2. Run integration tests
-```
-
-### 4. **Runnable Examples (Cookbooks)**
-**In**: `specs/###-feature/tasks.md`
-
-Verify each user story works:
-```markdown
-## Examples / Cookbooks
-
-| Example | Location | Status |
-|---------|----------|--------|
-| Basic login | examples/login_test.py | ✅ Passing |
-| OAuth flow | examples/oauth_test.py | ✅ Passing |
-```
-
-## Project Structure
-
-After using speckit, your project will have:
+## Output Structure
 
 ```
 your-project/
-├── .specify/
-│   └── memory/
-│       └── constitution.md    # Your project's rules (REQUIRED)
-├── specs/                     # Auto-generated by workflow
+├── .specify/memory/constitution.md
+├── specs/
 │   └── ###-feature-name/
-│       ├── spec.md           # Requirements & user stories
-│       ├── AGENTS.md         # Feature-specific instructions (Codex)
-│       ├── CLAUDE.md         # Feature-specific instructions (Claude Code plugin)
-│       ├── decisions.md      # ADRs - the "why"
-│       ├── plan.md           # Implementation plan
-│       ├── tasks.md          # Task list with progress
-│       ├── research.md       # Technical research
-│       ├── data-model.md     # Entity definitions
-│       └── quickstart.md     # Testing procedures
-├── AGENTS.md                 # Project-wide code locations (Codex)
-├── CLAUDE.md                 # Project-wide code locations (Claude Code plugin)
-└── src/                      # Your code
+│       ├── spec.md
+│       ├── plan.md
+│       ├── tasks.md
+│       ├── decisions.md
+│       ├── research.md
+│       ├── data-model.md
+│       ├── quickstart.md
+│       └── AGENTS.md
+└── AGENTS.md
 ```
-
-## Workflow Details
-
-### Phase 1: Specification (`/speckit.specify`)
-
-**Input**: Natural language description
-**Output**: `specs/###-feature/spec.md`
-
-Creates:
-- User stories with acceptance criteria
-- Functional requirements (testable, technology-agnostic)
-- Success criteria (measurable outcomes)
-- Edge cases
-- Key entities
-
-**Example**:
-```
-/speckit.specify "Build a task management system with Kanban boards.
-Users can create projects, add tasks, and move cards between columns."
-```
-
-### Phase 2: Clarification (`/speckit.clarify`)
-
-**Optional**: Resolve ambiguities before planning
-**Output**: Updated `spec.md` with clarifications
-
-Uses structured questioning across 8 categories:
-- Functional scope & behavior
-- Domain & data model
-- Interaction & UX flow
-- Non-functional quality attributes
-- Integration & external dependencies
-- Edge cases & failure handling
-- Constraints & tradeoffs
-- Terminology & consistency
-
-### Phase 3: Planning (`/speckit.plan`)
-
-**Input**: Your tech stack and architecture choices
-**Output**: Technical implementation plan
-
-Creates:
-- `research.md` - Technical decisions with rationale
-- `decisions.md` - ADRs for key choices
-- `data-model.md` - Entities, types, relationships
-- `plan.md` - Architecture and file structure
-- `quickstart.md` - Testing procedures
-- `CLAUDE.md` - Feature-specific context
-
-**Example**:
-```
-/speckit.plan
-# Then provide: "Use Next.js 14, PostgreSQL, Prisma ORM,
-# shadcn/ui components. Deploy to Vercel."
-```
-
-### Phase 4: Task Breakdown (`/speckit.tasks`)
-
-**Output**: `tasks.md` with dependency-ordered tasks
-
-Generates:
-- Phase 1: Setup tasks
-- Phase 2: Foundational (blocking) tasks
-- Phase 3+: User story phases (one per story)
-- Final Phase: Polish
-
-Tasks include:
-- Parallel markers `[P]` for concurrent execution
-- Story labels `[US1]`, `[US2]` for traceability
-- File paths for each task
-- Progress tracking section
-
-### Phase 5: Implementation
-
-Two options for implementation:
-
-**Option A: `/build` (Recommended) - Multi-Agent Orchestration**
-
-Uses fresh context windows per task batch:
-- Lead agent orchestrates and tracks progress
-- Implementer subagents handle task batches with fresh context
-- Tester subagents verify after each batch
-- Browser MCP (chrome-in-claude) for UI testing
-- Dynamic batch sizing based on task complexity
-
-```bash
-/build specs/001-feature/    # Start fresh
-/build --continue            # Resume from incomplete
-```
-
-**Option B: `/speckit.implement` - Phase-by-Phase**
-
-Manual control over each phase:
-```bash
-/speckit.implement phase:1   # Setup only
-/speckit.implement phase:2   # Foundational
-/speckit.implement continue  # Resume from incomplete
-```
-
-## Complete Workflow (`/sdd-flow`)
-
-The `/sdd-flow` command orchestrates everything:
-
-1. **Codebase Exploration**: 4 parallel agents analyze tech stack, patterns, related code
-2. **Interactive Interview**: AskUserQuestion tool for deep requirements gathering
-3. **Specification**: Generate `spec.md` from interview
-4. **CHECKPOINT**: User approves spec
-5. **Planning**: Generate all technical documents
-6. **CHECKPOINT**: User approves plan
-7. **Task Generation**: Create `tasks.md`
-8. **Ready**: All artifacts ready for `/build` or `/speckit.implement`
-
-## Constitution File
-
-**Location**: `.specify/memory/constitution.md` (per-project)
-
-Defines non-negotiable principles:
-
-```markdown
-# Project Constitution
-
-## Core Principles
-
-### 1. Type Safety
-**MUST**:
-- Use TypeScript strict mode
-- Add type hints in Python
-
-**MUST NOT**:
-- Use `any` type without justification
-
-### 2. Testing
-**MUST**:
-- Write tests for all features
-- Maintain >80% coverage
-
-### 3. Performance
-**MUST**:
-- API responses < 500ms
-- Page load < 3s
-
-## Tech Stack Constraints
-- PostgreSQL only (no MongoDB)
-- React 18+ (no class components)
-```
-
-All specs, plans, and implementations validate against the constitution.
-
-## Examples
-
-### Example 1: Add Feature to Existing Project
-
-```bash
-# 1. Ensure constitution exists
-ls .specify/memory/constitution.md
-
-# 2. Run complete workflow
-/sdd-flow "Add real-time notifications using WebSockets.
-Show toast for new messages. Store in PostgreSQL."
-
-# 3. Approve checkpoints, then implement
-/build specs/###-feature-name/
-```
-
-### Example 2: Start New Project
-
-```bash
-# 1. Create constitution
-mkdir -p .specify/memory
-cat > .specify/memory/constitution.md << EOF
-# My Project Constitution
-[Add your rules]
-EOF
-
-# 2. Create CLAUDE.md with code locations
-cat > CLAUDE.md << EOF
-# CLAUDE.md
-## Code Locations
-| What | Where |
-|------|-------|
-| API | src/api/ |
-| Tests | tests/ |
-EOF
-
-# 3. Build first feature
-/sdd-flow "Create REST API for user management"
-```
-
-## Philosophy
-
-1. **Specification First**: Define WHAT before HOW
-2. **Constitution Governs**: Non-negotiable principles guide all decisions
-3. **Incremental Refinement**: Clarify → Plan → Task → Implement
-4. **Session Continuity**: Progress tracking survives context resets
-5. **Decision Traceability**: ADRs preserve the "why"
-
-## Credits
-
-- **Framework Base**: [GitHub spec-kit](https://github.com/github/spec-kit)
-- **Production Enhancements**: [Ashpreet Bedi](https://x.com/ashpreetbedi/status/2011220028453241218)
-- **Plugin Author**: Isaac Kargar
 
 ## License
 
