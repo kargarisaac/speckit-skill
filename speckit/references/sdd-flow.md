@@ -20,10 +20,10 @@ You **MUST** have a feature description in $ARGUMENTS. If empty, ask the user to
 This command provides a single-command, interview-driven workflow that combines codebase exploration, incremental specification building, and artifact generation. It replaces the manual sequence of `sdd-define → speckit.specify → speckit.clarify → speckit.plan → speckit.tasks`.
 
 **Key Features:**
-- Auto-explores codebase with parallel subagents
+- Auto-explores codebase with parallel agents/workers (if available)
 - Incremental interview (1-2 questions at a time, updates spec after each answer)
 - Checkpoint breaks for user review
-- Uses subagents for heavy tasks to avoid context compaction
+- Uses parallel workers for heavy tasks when supported; otherwise do sequential passes
 
 **Reference**: [GitHub Spec-Kit](https://github.com/github/spec-kit)
 
@@ -38,9 +38,9 @@ Extract from user input:
 - **Feature name**: Short descriptive name (2-4 words) for the branch
 - **Affected areas**: UI, backend, database, etc. (inferred from description)
 
-### Step 1.2: Codebase Exploration (Launch 4 Subagents in Parallel)
+### Step 1.2: Codebase Exploration (Launch 4 Parallel Workers If Available)
 
-Launch **all 4 subagents simultaneously in a single message** to gather codebase context:
+Launch **all 4 workers simultaneously in a single message** to gather codebase context (if the platform supports it). If not, run these sequentially and keep outputs distinct.
 
 **Agent 1 - Tech Stack Discovery** (Explore type):
 ```
@@ -82,13 +82,13 @@ Explore the codebase to identify:
 - Code style (check .eslintrc, .prettierrc, biome.json)
 - Testing framework and patterns
 - Documentation standards
-- Any AGENTS.md or CONTRIBUTING.md guidelines
+- Any AGENTS.md/CLAUDE.md or CONTRIBUTING.md guidelines
 Report findings as bullet points.
 ```
 
 ### Step 1.3: Create Feature Branch
 
-After subagents complete:
+After workers complete:
 
 1. **Determine next feature number**:
    ```bash
@@ -146,17 +146,26 @@ Ready to start interview...
 
 ### Core Instruction
 
-**Interview me in detail using the `AskUserQuestion` tool about literally anything: technical implementation, UI & UX, concerns, tradeoffs, etc. Make sure the questions are NOT obvious.**
+**Interview me in detail using the platform’s structured question tool (Claude: `AskUserQuestion`, OpenCode: `question`; Codex: ask in chat) about literally anything: technical implementation, UI & UX, concerns, tradeoffs, etc. Make sure the questions are NOT obvious.**
+
+**For every question you ask, include your recommendation and a short rationale (1–2 sentences).**
 
 **Be very in-depth and continue interviewing me continually until it's complete, then write the spec to the file.**
 
-### How to Use AskUserQuestion Tool
+### How to Use the Structured Question Tool (Platform-Specific)
 
-You **MUST** use the `AskUserQuestion` tool for ALL questions in this phase. This tool provides a structured way to ask questions with options.
+You **MUST** use the platform’s structured question tool for ALL questions in this phase. This tool provides a structured way to ask questions with options.
 
-**Tool Format:**
+**Tool mapping (use the native one available):**
+- **Claude Code**: `AskUserQuestion`
+- **OpenCode**: `question`
+- **Codex**: ask in chat with options formatted clearly
+
+**For each question, also state your recommendation and a brief why** (either by labeling a recommended option and adding a short rationale, and/or by sending a short follow-up recommendation message right after the tool call).
+
+**Tool Format (conceptual, adapt to the platform schema):**
 ```
-AskUserQuestion with parameters:
+Structured question tool with parameters:
 - questions: Array of 1-4 questions (ask 1-2 at a time for depth)
 - Each question has:
   - question: The full question text
@@ -199,10 +208,11 @@ Interview about **ALL** of these areas, not just technical ones:
 
 There is no fixed limit - be thorough. A complex feature might need 10+ questions. A simple one might need 3.
 
-1. **Use AskUserQuestion tool** with 1-2 questions at a time:
+1. **Use the structured question tool** with 1-2 questions at a time:
    - Group related questions together (max 2 per call)
    - Wait for response before next questions
    - Each question should have 2-4 options
+   - For each question, include a clear recommendation + rationale (1–2 sentences)
 
 2. **After each answer**:
    - Update spec.md in memory with the decision
@@ -282,11 +292,11 @@ Wait for user response before proceeding.
 
 ---
 
-## Phase 3: Plan Generation (Subagent)
+## Phase 3: Plan Generation (Worker/Agent)
 
-After user approves spec at Checkpoint 1, launch **ONE Plan subagent** to generate artifacts:
+After user approves spec at Checkpoint 1, launch **ONE Plan worker/agent** to generate artifacts (or do this step sequentially if workers are not supported):
 
-**Plan Subagent Prompt:**
+**Plan Worker Prompt:**
 ```
 You are generating implementation artifacts for feature: [feature name]
 
@@ -329,14 +339,14 @@ You are generating implementation artifacts for feature: [feature name]
    - Expected outputs for each test
    - Troubleshooting guidance
 
-9. Update feature `AGENTS.md` with concrete file paths:
+9. Update feature `AGENTS.md` and `CLAUDE.md` with concrete file paths:
     - Update "Files to Modify" with actual files to change
     - Update "Files to Create" with new files to add
     - Update "Reference Implementations" with similar code patterns found
     - Add feature-specific code patterns from decisions.md
     - Update "Don't" rules based on decisions made
 
-**Output**: Report paths to all generated files (including decisions.md and updated AGENTS.md) and a summary of decisions made.
+**Output**: Report paths to all generated files (including decisions.md and updated AGENTS.md/CLAUDE.md) and a summary of decisions made.
 ```
 
 ---
@@ -356,6 +366,8 @@ Present plan summary and wait for user approval:
 - plan.md: Complete technical plan
 - quickstart.md: Testing procedures
 - AGENTS.md: Updated with concrete file paths
+- CLAUDE.md: Updated with concrete file paths
+- CLAUDE.md: Updated with concrete file paths
 
 ### Architecture Summary
 - Project Structure: [summary]
@@ -381,11 +393,11 @@ Wait for user response before proceeding.
 
 ---
 
-## Phase 4: Task Generation (Subagent)
+## Phase 4: Task Generation (Worker/Agent)
 
-After user approves plan at Checkpoint 2, launch **ONE Plan subagent** to generate tasks:
+After user approves plan at Checkpoint 2, launch **ONE Plan worker/agent** to generate tasks (or do this step sequentially if workers are not supported):
 
-**Task Generation Subagent Prompt:**
+**Task Generation Worker Prompt:**
 ```
 You are generating tasks for feature: [feature name]
 
@@ -438,7 +450,9 @@ Present final summary:
 | File | Status | Location | Purpose |
 |------|--------|----------|---------|
 | spec.md | Created | specs/[###-feature]/spec.md | Requirements & user stories |
-| AGENTS.md | Created | specs/[###-feature]/AGENTS.md | Feature-specific Codex instructions |
+| AGENTS.md | Created | specs/[###-feature]/AGENTS.md | Feature-specific agent instructions |
+| CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Claude-specific agent instructions |
+| CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Claude-specific agent instructions |
 | research.md | Created | specs/[###-feature]/research.md | Technical research findings |
 | decisions.md | Created | specs/[###-feature]/decisions.md | ADRs - the "why" behind decisions |
 | data-model.md | Created | specs/[###-feature]/data-model.md | Entity definitions |
@@ -475,7 +489,7 @@ Present final summary:
 
 ---
 
-## Appendix A: AskUserQuestion Examples
+## Appendix A: Structured Question Tool Examples (AskUserQuestion Format; adapt to your platform schema)
 
 ### Example 1: Technical + Integration Questions
 
@@ -590,10 +604,10 @@ AskUserQuestion({
 
 - **If $ARGUMENTS is empty**: Ask user for feature description before proceeding
 - **If codebase exploration fails**: Report findings but continue with available context
-- **ALWAYS use `AskUserQuestion` tool** for Phase 2 interview - never use plain markdown questions
+- **ALWAYS use the platform’s structured question tool** for Phase 2 interview - never use plain markdown questions when a tool is available
 - **Be thorough in interview**: No fixed question limit - continue until user says "done" or all ambiguities covered
 - **Cover all categories**: Technical, UI/UX, concerns, tradeoffs, user scenarios, data, integration, success criteria
 - **If user says "done" during interview**: Proceed to Checkpoint 1 with current spec
 - **If user rejects at checkpoint**: Allow edits or regeneration
-- **If subagent fails**: Report error and allow retry or manual intervention
-- **Always use subagents** for codebase exploration (Phase 1) and artifact generation (Phase 3, 4) to avoid context compaction
+- **If a worker fails**: Report error and allow retry or manual intervention
+- **Use parallel workers** for codebase exploration (Phase 1) and artifact generation (Phase 3, 4) when supported; otherwise do sequential passes

@@ -165,7 +165,7 @@ Parse `$ARGUMENTS` for phase selection:
    c. **Why this is non-negotiable**:
       - Context can reset at any time (30% usage)
       - If you don't update progress, all work is lost to the next session
-      - The next Codex instance needs to know exactly where you stopped
+      - The next session/assistant needs to know exactly where you stopped
       - This is how Ashpreet Bedi's team maintains session continuity
 
    d. **The rule**:

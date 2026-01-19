@@ -1,4 +1,6 @@
-# AGENTS.md — [FEATURE NAME]
+# Agent Instructions — [FEATURE NAME]
+
+<!-- Use this template for both AGENTS.md and CLAUDE.md -->
 
 **Feature Branch**: `[###-feature-name]`
 **Created**: [DATE]
@@ -54,7 +56,7 @@ When resuming work on this feature:
 # Run tests for this feature
 [test command]
 
-# Start implementation (sequential in Codex)
+# Start implementation (sequential execution)
 /build specs/[###-feature-name]/
 
 # Or phase-by-phase implementation

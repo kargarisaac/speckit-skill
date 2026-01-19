@@ -17,7 +17,7 @@ description: "Task list template for feature implementation"
 ## Progress (Session Continuity)
 
 <!--
-  CRITICAL: This section enables Codex to resume work after context resets.
+  CRITICAL: This section enables an assistant to resume work after context resets.
   Update this section after each task completion or session end.
   Last Updated: [DATE/TIME]
 -->
@@ -287,7 +287,7 @@ With multiple developers:
   If the cookbook doesn't run, the implementation isn't done.
 
   Add runnable examples here as you implement each user story.
-  Codex should create and run these to verify the implementation works.
+  The assistant should create and run these to verify the implementation works.
 -->
 
 ### Example Commands

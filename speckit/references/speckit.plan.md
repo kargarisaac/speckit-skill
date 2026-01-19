@@ -30,11 +30,11 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Phase 0: Generate research.md (resolve all NEEDS CLARIFICATION)
    - Phase 0: Generate decisions.md (capture ADRs from research decisions)
    - Phase 1: Generate data-model.md, contracts/, quickstart.md
-   - Phase 1: Update feature AGENTS.md with concrete file paths
+   - Phase 1: Update feature AGENTS.md and CLAUDE.md with concrete file paths
    - Phase 1: Update agent context by running the agent script
    - Re-evaluate constraints post-design
 
-4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts including decisions.md and updated AGENTS.md.
+4. **Stop and report**: Command ends after Phase 2 planning. Report branch, IMPL_PLAN path, and generated artifacts including decisions.md and updated AGENTS.md/CLAUDE.md.
 
 ## Phases
 
@@ -82,8 +82,8 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Use standard REST/GraphQL patterns
    - Output OpenAPI/GraphQL schema to `/contracts/`
 
-3. **Update feature AGENTS.md** with concrete file paths:
-   - Read `SPECS_DIR/AGENTS.md` (created by speckit.specify)
+3. **Update feature AGENTS.md and CLAUDE.md** with concrete file paths:
+   - Read `SPECS_DIR/AGENTS.md` and `SPECS_DIR/CLAUDE.md` (created by speckit.specify)
    - Update "Files to Modify" with actual files to change
    - Update "Files to Create" with new files to add
    - Update "Reference Implementations" with similar code patterns found
@@ -91,13 +91,13 @@ You **MUST** consider the user input before proceeding (if not empty).
    - Update "Don't" rules based on decisions made
 
 4. **Agent context update**:
-   - Run `${SPECKIT_ROOT}/scripts/update-agent-context.sh codex`
+   - Run `${SPECKIT_ROOT}/scripts/update-agent-context.sh [agent_type]` (e.g., `claude`, `opencode`, `codex`)
    - These scripts detect which AI agent is in use
    - Update the appropriate agent-specific context file
    - Add only new technology from current plan
    - Preserve manual additions between markers
 
-**Output**: data-model.md, /contracts/*, quickstart.md, AGENTS.md (updated), agent-specific file
+**Output**: data-model.md, /contracts/*, quickstart.md, AGENTS.md (updated), CLAUDE.md (updated), agent-specific file
 
 ## Key rules
 

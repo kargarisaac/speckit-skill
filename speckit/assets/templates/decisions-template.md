@@ -14,7 +14,7 @@ This document captures the "why" behind architectural and implementation decisio
 
 **Status**: [Proposed | Accepted | Deprecated | Superseded by ADR-XXX]
 **Date**: [DATE]
-**Deciders**: [Isaac, Codex]
+**Deciders**: [Owner, contributor(s)]
 
 ### Context
 
@@ -95,4 +95,4 @@ Decisions that need to be made during implementation:
 
 - Decisions should be recorded BEFORE implementation, not after
 - When revisiting a decision, create a new ADR that supersedes the old one
-- Include enough context that future-you (or Codex) can understand the rationale
+- Include enough context that future-you (or another assistant) can understand the rationale

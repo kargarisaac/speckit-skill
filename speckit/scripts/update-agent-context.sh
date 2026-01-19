@@ -30,9 +30,9 @@
 #
 # 5. Multi-Agent Support
 #    - Handles agent-specific file paths and naming conventions
-#    - Supports: Claude, Gemini, Copilot, Cursor, Qwen, opencode, Codex, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, Amp, SHAI, or Amazon Q Developer CLI
+#    - Supports multiple AI agent formats (Claude, Gemini, Copilot, Cursor, Qwen, opencode, Codex, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, Amp, SHAI, Amazon Q Developer CLI, and others)
 #    - Can update single agents or all existing agent files
-#    - Creates default Codex AGENTS.md if no agent files exist
+#    - Creates default AGENTS.md and CLAUDE.md if no agent files exist
 #
 # Usage: ./update-agent-context.sh [agent_type]
 # Agent types: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|shai|q|bob|qoder
@@ -598,10 +598,10 @@ update_specific_agent() {
             update_agent_file "$QWEN_FILE" "Qwen Code"
             ;;
         opencode)
-            update_agent_file "$AGENTS_FILE" "opencode"
+            update_agent_file "$AGENTS_FILE" "AGENTS.md"
             ;;
         codex)
-            update_agent_file "$AGENTS_FILE" "Codex CLI"
+            update_agent_file "$AGENTS_FILE" "AGENTS.md"
             ;;
         windsurf)
             update_agent_file "$WINDSURF_FILE" "Windsurf"
@@ -671,7 +671,7 @@ update_all_existing_agents() {
     fi
     
     if [[ -f "$AGENTS_FILE" ]]; then
-        update_agent_file "$AGENTS_FILE" "Codex/opencode"
+        update_agent_file "$AGENTS_FILE" "AGENTS.md"
         found_agent=true
     fi
     
@@ -720,10 +720,11 @@ update_all_existing_agents() {
         found_agent=true
     fi
     
-    # If no agent files exist, create a default Codex AGENTS.md
+    # If no agent files exist, create default AGENTS.md and CLAUDE.md
     if [[ "$found_agent" == false ]]; then
-        log_info "No existing agent files found, creating default AGENTS.md for Codex..."
-        update_agent_file "$AGENTS_FILE" "Codex CLI"
+        log_info "No existing agent files found, creating default AGENTS.md and CLAUDE.md..."
+        update_agent_file "$AGENTS_FILE" "AGENTS.md"
+        update_agent_file "$CLAUDE_FILE" "Claude Code"
     fi
 }
 print_summary() {

@@ -13,7 +13,7 @@ You **MUST** parse the user input before proceeding.
 
 ## Overview
 
-This command implements features using a **multi-agent orchestration system**. Each task batch is handled by a fresh subagent to avoid context bloat, while the lead orchestrator tracks progress in `tasks.md`.
+This command implements features using a **multi-agent orchestration system**. Each task batch is handled by a fresh worker/agent (or a separate sequential pass if workers are not supported) to avoid context bloat, while the lead orchestrator tracks progress in `tasks.md`.
 
 **Architecture:**
 ```
@@ -26,11 +26,11 @@ This command implements features using a **multi-agent orchestration system**. E
               │                              │
               ▼                              ▼
 ┌─────────────────────────┐    ┌─────────────────────────────┐
-│   IMPLEMENTER SUBAGENT  │    │      TESTER SUBAGENT        │
+│   IMPLEMENTER WORKER    │    │      TESTER WORKER          │
 │   (Fresh context)       │    │      (Fresh context)        │
 │                         │    │                             │
 │   - Implements tasks    │    │   - E2E tests after batch   │
-│   - Marks [X] in tasks  │    │   - Uses browser MCP        │
+│   - Marks [X] in tasks  │    │   - Uses browser automation │
 │   - Groups small tasks  │    │   - Verifies functionality  │
 └─────────────────────────┘    └─────────────────────────────┘
 ```
@@ -126,24 +126,24 @@ WHILE incomplete tasks exist in tasks.md:
         - Small tasks can be grouped (2-3 per batch)
         - Respect dependencies (don't batch dependent tasks)
 
-  4.2 DISPATCH IMPLEMENTER SUBAGENT(S)
-      - For independent [P] tasks: Launch parallel subagents
-      - For dependent tasks: Launch single sequential subagent
-      - Use Task tool with subagent_type="general-purpose"
+  4.2 DISPATCH IMPLEMENTER WORKER(S)
+      - For independent [P] tasks: Launch parallel workers (if supported)
+      - For dependent tasks: Launch a single sequential worker (or run sequentially)
+      - Use the platform’s worker/agent tool if available; otherwise execute sequentially
       - Include IMPLEMENTER PROMPT (see below)
 
   4.3 WAIT FOR COMPLETION
-      - Collect results from subagent(s)
+      - Collect results from worker(s)
       - Re-read tasks.md to verify tasks marked [x]
       - Log any errors or issues
 
   4.4 HANDLE FAILURES
-      - If subagent failed: RETRY ONCE with fresh context
+      - If a worker failed: RETRY ONCE with fresh context
       - If retry also fails: STOP and report error to user
       - Ask user: "Retry again?", "Skip this task?", or "Stop?"
 
   4.5 TEST TRIGGER (after each batch)
-      - Launch TESTER SUBAGENT with fresh context
+      - Launch TESTER WORKER/AGENT with fresh context (or run tests yourself)
       - Use TESTER PROMPT (see below)
       - Report test results (PASS/FAIL with details)
 
@@ -157,9 +157,9 @@ END WHILE
 
 ---
 
-## Step 5: Implementer Subagent Prompt
+## Step 5: Implementer Worker Prompt
 
-When dispatching an implementer subagent, use this prompt template:
+When dispatching an implementer worker/agent, use this prompt template:
 
 ```markdown
 You are implementing tasks for feature: {feature_name}
@@ -195,9 +195,9 @@ You are implementing tasks for feature: {feature_name}
 
 ---
 
-## Step 6: Tester Subagent Prompt
+## Step 6: Tester Worker Prompt
 
-After each batch, launch a tester subagent:
+After each batch, launch a tester worker/agent (or run tests yourself):
 
 ```markdown
 You are testing the implementation for feature: {feature_name}
@@ -223,9 +223,8 @@ pytest tests/ -v
 npm test
 ```
 
-### 2. For UI Features - Use Browser MCP
-**Primary**: chrome-in-claude MCP tool
-**Fallback**: chrome-devtools MCP tool
+### 2. For UI Features - Use Browser Automation (If Available)
+Use your platform's browser automation tool (e.g., Playwright, Puppeteer, built-in browser tool). If none is available, skip automated UI checks and note that manual testing is required.
 
 Steps:
 a. Navigate to the relevant page
@@ -233,14 +232,14 @@ b. Test the implemented functionality
 c. Check browser console for errors
 d. Verify user interactions work
 
-Example commands:
+Example commands (if using MCP):
 ```bash
 mcp-cli call chrome-in-claude/navigate '{"url": "http://localhost:3000/feature-path"}'
 mcp-cli call chrome-in-claude/read_page '{}'
 mcp-cli call chrome-in-claude/computer '{"action": "click", "coordinate": [x, y]}'
 ```
 
-If chrome-in-claude is unavailable, try:
+If your primary MCP browser tool is unavailable, try a fallback:
 ```bash
 mcp-cli call chrome-devtools/navigate '{"url": "http://localhost:3000/feature-path"}'
 ```
@@ -260,7 +259,7 @@ mcp-cli call chrome-devtools/navigate '{"url": "http://localhost:3000/feature-pa
 When all tasks are marked `[x]` in tasks.md:
 
 1. **Run final verification:**
-   - Launch one more tester subagent for full E2E test
+   - Launch one more tester worker/agent for full E2E test (or run it yourself)
    - Verify all user stories from spec.md work
 
 2. **Report completion:**
@@ -293,12 +292,12 @@ When all tasks are marked `[x]` in tasks.md:
 
 | Principle | Implementation |
 |-----------|----------------|
-| **Fresh context per subagent** | Each batch gets a new subagent to avoid context bloat |
+| **Fresh context per worker** | Each batch gets a new worker/agent to avoid context bloat |
 | **tasks.md as single source of truth** | All progress tracked in tasks.md, survives context resets |
 | **Dynamic batch sizing** | Lead agent decides batch size based on task complexity |
 | **Test after every batch** | Catches issues early, not at the end |
-| **Retry once on failure** | If subagent fails, retry with fresh context; stop if still failing |
-| **Browser MCP for UI** | Use chrome-in-claude (primary) or chrome-devtools (fallback) |
+| **Retry once on failure** | If a worker fails, retry with fresh context; stop if still failing |
+| **Browser automation for UI** | Use the platform’s browser automation tool (if available) |
 
 ---
 
@@ -308,10 +307,10 @@ When all tasks are marked `[x]` in tasks.md:
 |-----------|--------|
 | Spec folder not found | Report error, ask user to provide correct path |
 | Required file missing | Report which file, suggest running `/speckit.tasks` first |
-| Subagent fails | Retry once with fresh context |
+| Worker fails | Retry once with fresh context |
 | Retry also fails | Stop and ask user what to do |
 | Test fails | Report failure, continue with next batch (don't block) |
-| Browser MCP unavailable | Skip UI tests, report that manual testing is needed |
+| Browser automation unavailable | Skip UI tests, report that manual testing is needed |
 
 ---
 
@@ -335,8 +334,8 @@ When all tasks are marked `[x]` in tasks.md:
 
 ## Notes
 
-- This command uses the Task tool to spawn subagents
-- Each subagent has fresh context (no memory of previous batches)
+- This command uses the platform’s worker/agent tool when available; otherwise run sequentially
+- Each worker/agent has fresh context (no memory of previous batches) when supported
 - Progress is tracked in tasks.md to survive context resets
 - The lead orchestrator (you) maintains overall progress awareness
 - Parallel execution uses [P] markers from tasks.md
