@@ -1,6 +1,6 @@
 # Agent Instructions — [FEATURE NAME]
 
-<!-- Use this template for both AGENTS.md and CLAUDE.md -->
+<!-- Use this template for existing feature-level agent context files -->
 
 **Feature Branch**: `[###-feature-name]`
 **Created**: [DATE]

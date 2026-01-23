@@ -98,14 +98,7 @@ Given that feature description, do this:
 
 5. Write the specification to SPEC_FILE using the template structure, replacing placeholders with concrete details derived from the feature description (arguments) while preserving section order and headings.
 
-6. **Generate Feature-Level Agent Files**: Create `FEATURE_DIR/AGENTS.md` and `FEATURE_DIR/CLAUDE.md` using `${SPECKIT_ROOT}/assets/templates/feature-agents-template.md`:
-   - Fill in the feature name and branch from step 2
-   - Add 2-3 sentence project context from the feature description
-   - Leave "Files to Modify/Create" sections as placeholders (filled during planning)
-   - Add feature-specific "Don't" rules based on scope
-   - These files provide the assistant with context-specific instructions for this feature (Claude uses CLAUDE.md)
-
-7. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
+6. **Specification Quality Validation**: After writing the initial spec, validate it against quality criteria:
 
    a. **Create Spec Quality Checklist**: Generate a checklist file at `FEATURE_DIR/checklists/requirements.md` using the checklist template structure with these validation items:
 
@@ -200,9 +193,6 @@ Given that feature description, do this:
 8. Report completion with:
    - Branch name
    - Spec file path (`specs/###-feature/spec.md`)
-   - Feature AGENTS.md path (`specs/###-feature/AGENTS.md`)
-   - Feature CLAUDE.md path (`specs/###-feature/CLAUDE.md`)
-   - Feature CLAUDE.md path (`specs/###-feature/CLAUDE.md`)
    - Checklist results
    - Readiness for the next phase (`/speckit.clarify` or `/speckit.plan`)
 

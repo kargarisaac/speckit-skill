@@ -17,7 +17,6 @@
 #    - Handles missing or incomplete specification data gracefully
 #
 # 3. Agent File Management
-#    - Creates new agent context files from templates when needed
 #    - Updates existing agent files with new project information
 #    - Preserves manual additions and custom configurations
 #    - Supports multiple AI agent formats and directory structures
@@ -30,12 +29,12 @@
 #
 # 5. Multi-Agent Support
 #    - Handles agent-specific file paths and naming conventions
-#    - Supports multiple AI agent formats (Claude, Gemini, Copilot, Cursor, Qwen, opencode, Codex, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, Amp, SHAI, Amazon Q Developer CLI, and others)
+#    - Supports multiple AI agent formats (Gemini, Copilot, Cursor, Qwen, Windsurf, Kilo Code, Auggie CLI, Roo Code, CodeBuddy CLI, Qoder CLI, SHAI, and others)
 #    - Can update single agents or all existing agent files
-#    - Creates default AGENTS.md and CLAUDE.md if no agent files exist
+#    - Skips creation when no agent files exist
 #
 # Usage: ./update-agent-context.sh [agent_type]
-# Agent types: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|shai|q|bob|qoder
+# Agent types: gemini|copilot|cursor-agent|qwen|windsurf|kilocode|auggie|roo|codebuddy|shai|qoder
 # Leave empty to update all existing agent files
 
 set -e
@@ -58,23 +57,18 @@ eval $(get_feature_paths)
 NEW_PLAN="$IMPL_PLAN"  # Alias for compatibility with existing code
 AGENT_TYPE="${1:-}"
 
-# Agent-specific file paths  
-CLAUDE_FILE="$REPO_ROOT/CLAUDE.md"
+# Agent-specific file paths
 GEMINI_FILE="$REPO_ROOT/GEMINI.md"
 COPILOT_FILE="$REPO_ROOT/.github/agents/copilot-instructions.md"
 CURSOR_FILE="$REPO_ROOT/.cursor/rules/specify-rules.mdc"
 QWEN_FILE="$REPO_ROOT/QWEN.md"
-AGENTS_FILE="$REPO_ROOT/AGENTS.md"
 WINDSURF_FILE="$REPO_ROOT/.windsurf/rules/specify-rules.md"
 KILOCODE_FILE="$REPO_ROOT/.kilocode/rules/specify-rules.md"
 AUGGIE_FILE="$REPO_ROOT/.augment/rules/specify-rules.md"
 ROO_FILE="$REPO_ROOT/.roo/rules/specify-rules.md"
 CODEBUDDY_FILE="$REPO_ROOT/CODEBUDDY.md"
 QODER_FILE="$REPO_ROOT/QODER.md"
-AMP_FILE="$REPO_ROOT/AGENTS.md"
 SHAI_FILE="$REPO_ROOT/SHAI.md"
-Q_FILE="$REPO_ROOT/AGENTS.md"
-BOB_FILE="$REPO_ROOT/AGENTS.md"
 
 # Template file
 TEMPLATE_FILE="${SPECKIT_ROOT}/assets/templates/agent-file-template.md"
@@ -520,37 +514,9 @@ update_agent_file() {
     local current_date
     current_date=$(date +%Y-%m-%d)
     
-    # Create directory if it doesn't exist
-    local target_dir
-    target_dir=$(dirname "$target_file")
-    if [[ ! -d "$target_dir" ]]; then
-        if ! mkdir -p "$target_dir"; then
-            log_error "Failed to create directory: $target_dir"
-            return 1
-        fi
-    fi
-    
     if [[ ! -f "$target_file" ]]; then
-        # Create new file from template
-        local temp_file
-        temp_file=$(mktemp) || {
-            log_error "Failed to create temporary file"
-            return 1
-        }
-        
-        if create_new_agent_file "$target_file" "$temp_file" "$project_name" "$current_date"; then
-            if mv "$temp_file" "$target_file"; then
-                log_success "Created new $agent_name context file"
-            else
-                log_error "Failed to move temporary file to $target_file"
-                rm -f "$temp_file"
-                return 1
-            fi
-        else
-            log_error "Failed to create new agent file"
-            rm -f "$temp_file"
-            return 1
-        fi
+        log_info "No existing $agent_name context file found at $target_file. Skipping."
+        return 0
     else
         # Update existing file
         if [[ ! -r "$target_file" ]]; then
@@ -582,9 +548,6 @@ update_specific_agent() {
     local agent_type="$1"
     
     case "$agent_type" in
-        claude)
-            update_agent_file "$CLAUDE_FILE" "Claude Code"
-            ;;
         gemini)
             update_agent_file "$GEMINI_FILE" "Gemini CLI"
             ;;
@@ -596,12 +559,6 @@ update_specific_agent() {
             ;;
         qwen)
             update_agent_file "$QWEN_FILE" "Qwen Code"
-            ;;
-        opencode)
-            update_agent_file "$AGENTS_FILE" "AGENTS.md"
-            ;;
-        codex)
-            update_agent_file "$AGENTS_FILE" "AGENTS.md"
             ;;
         windsurf)
             update_agent_file "$WINDSURF_FILE" "Windsurf"
@@ -621,21 +578,12 @@ update_specific_agent() {
         qoder)
             update_agent_file "$QODER_FILE" "Qoder CLI"
             ;;
-        amp)
-            update_agent_file "$AMP_FILE" "Amp"
-            ;;
         shai)
             update_agent_file "$SHAI_FILE" "SHAI"
             ;;
-        q)
-            update_agent_file "$Q_FILE" "Amazon Q Developer CLI"
-            ;;
-        bob)
-            update_agent_file "$BOB_FILE" "IBM Bob"
-            ;;
         *)
             log_error "Unknown agent type '$agent_type'"
-            log_error "Expected: claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|roo|amp|shai|q|bob|qoder"
+            log_error "Expected: gemini|copilot|cursor-agent|qwen|windsurf|kilocode|auggie|roo|codebuddy|shai|qoder"
             exit 1
             ;;
     esac
@@ -645,11 +593,6 @@ update_all_existing_agents() {
     local found_agent=false
     
     # Check each possible agent file and update if it exists
-    if [[ -f "$CLAUDE_FILE" ]]; then
-        update_agent_file "$CLAUDE_FILE" "Claude Code"
-        found_agent=true
-    fi
-    
     if [[ -f "$GEMINI_FILE" ]]; then
         update_agent_file "$GEMINI_FILE" "Gemini CLI"
         found_agent=true
@@ -667,11 +610,6 @@ update_all_existing_agents() {
     
     if [[ -f "$QWEN_FILE" ]]; then
         update_agent_file "$QWEN_FILE" "Qwen Code"
-        found_agent=true
-    fi
-    
-    if [[ -f "$AGENTS_FILE" ]]; then
-        update_agent_file "$AGENTS_FILE" "AGENTS.md"
         found_agent=true
     fi
     
@@ -710,21 +648,10 @@ update_all_existing_agents() {
         found_agent=true
     fi
 
-    if [[ -f "$Q_FILE" ]]; then
-        update_agent_file "$Q_FILE" "Amazon Q Developer CLI"
-        found_agent=true
-    fi
     
-    if [[ -f "$BOB_FILE" ]]; then
-        update_agent_file "$BOB_FILE" "IBM Bob"
-        found_agent=true
-    fi
-    
-    # If no agent files exist, create default AGENTS.md and CLAUDE.md
+    # If no agent files exist, skip creation
     if [[ "$found_agent" == false ]]; then
-        log_info "No existing agent files found, creating default AGENTS.md and CLAUDE.md..."
-        update_agent_file "$AGENTS_FILE" "AGENTS.md"
-        update_agent_file "$CLAUDE_FILE" "Claude Code"
+        log_info "No existing agent files found. Skipping creation."
     fi
 }
 print_summary() {
@@ -745,7 +672,7 @@ print_summary() {
     
     echo
 
-    log_info "Usage: $0 [claude|gemini|copilot|cursor-agent|qwen|opencode|codex|windsurf|kilocode|auggie|codebuddy|shai|q|bob|qoder]"
+    log_info "Usage: $0 [gemini|copilot|cursor-agent|qwen|windsurf|kilocode|auggie|roo|codebuddy|shai|qoder]"
 }
 
 #==============================================================================

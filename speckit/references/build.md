@@ -13,7 +13,7 @@ You **MUST** parse the user input before proceeding.
 
 ## Overview
 
-This command implements features using a **multi-agent orchestration system**. Each task batch is handled by a fresh worker/agent (or a separate sequential pass if workers are not supported) to avoid context bloat, while the lead orchestrator tracks progress in `tasks.md`.
+This command implements features using a **multi-agent orchestration system**. Codex and Claude Code support subagents. Each task batch is handled by a fresh worker/agent (or a separate sequential pass if workers are not supported) to avoid context bloat, while the lead orchestrator tracks progress in `tasks.md`.
 
 **Architecture:**
 ```
@@ -127,7 +127,7 @@ WHILE incomplete tasks exist in tasks.md:
         - Respect dependencies (don't batch dependent tasks)
 
   4.2 DISPATCH IMPLEMENTER WORKER(S)
-      - For independent [P] tasks: Launch parallel workers (if supported)
+      - For independent [P] tasks: Launch parallel workers (Codex and Claude Code support subagents)
       - For dependent tasks: Launch a single sequential worker (or run sequentially)
       - Use the platform’s worker/agent tool if available; otherwise execute sequentially
       - Include IMPLEMENTER PROMPT (see below)

@@ -35,7 +35,7 @@ Implementation is sequential by default:
 Use speckit build for specs/001-user-auth/
 ```
 
-Feature context is written to `specs/###-feature/AGENTS.md`.
+Feature context is updated in existing agent context files (if present).
 
 ## Command Index
 
@@ -44,7 +44,7 @@ Feature context is written to `specs/###-feature/AGENTS.md`.
 - `speckit.clarify` — resolve ambiguities
 - `speckit.plan` — generate implementation plan
 - `speckit.tasks` — generate tasks
-- `build` — execute implementation phase-by-phase (sequential in codex, parallel in claude)
+- `build` — execute implementation phase-by-phase (parallel workers supported in Codex and Claude Code)
 - `speckit.analyze` — cross-artifact analysis
 - `speckit.checklist` — requirements quality checklist
 - `speckit.taskstoissues` — GitHub issues from tasks
@@ -62,8 +62,7 @@ your-project/
 │       ├── research.md
 │       ├── data-model.md
 │       ├── quickstart.md
-│       └── AGENTS.md
-└── AGENTS.md or CLAUDE.md
+└── (optional) existing agent context files updated if present
 ```
 
 ## License

@@ -20,10 +20,10 @@ You **MUST** have a feature description in $ARGUMENTS. If empty, ask the user to
 This command provides a single-command, interview-driven workflow that combines codebase exploration, incremental specification building, and artifact generation. It replaces the manual sequence of `sdd-define → speckit.specify → speckit.clarify → speckit.plan → speckit.tasks`.
 
 **Key Features:**
-- Auto-explores codebase with parallel agents/workers (if available)
+- Codex and Claude Code support subagents. Always auto-explore the codebase first using parallel agents for comprehensive context
 - Incremental interview (1-2 questions at a time, updates spec after each answer)
 - Checkpoint breaks for user review
-- Uses parallel workers for heavy tasks when supported; otherwise do sequential passes
+- Use parallel workers for heavy tasks (Codex and Claude Code support subagents); otherwise do sequential passes
 
 **Reference**: [GitHub Spec-Kit](https://github.com/github/spec-kit)
 
@@ -38,9 +38,9 @@ Extract from user input:
 - **Feature name**: Short descriptive name (2-4 words) for the branch
 - **Affected areas**: UI, backend, database, etc. (inferred from description)
 
-### Step 1.2: Codebase Exploration (Launch 4 Parallel Workers If Available)
+### Step 1.2: Codebase Exploration (Launch 4 Parallel Workers)
 
-Launch **all 4 workers simultaneously in a single message** to gather codebase context (if the platform supports it). If not, run these sequentially and keep outputs distinct.
+Codex and Claude Code support subagents. Launch **all 4 workers simultaneously in a single message** to gather comprehensive codebase context. If parallel agents are not available, run these sequentially and keep outputs distinct.
 
 **Agent 1 - Tech Stack Discovery** (Explore type):
 ```
@@ -82,7 +82,7 @@ Explore the codebase to identify:
 - Code style (check .eslintrc, .prettierrc, biome.json)
 - Testing framework and patterns
 - Documentation standards
-- Any AGENTS.md/CLAUDE.md or CONTRIBUTING.md guidelines
+- Any agent context or CONTRIBUTING.md guidelines
 Report findings as bullet points.
 ```
 
@@ -339,14 +339,14 @@ You are generating implementation artifacts for feature: [feature name]
    - Expected outputs for each test
    - Troubleshooting guidance
 
-9. Update feature `AGENTS.md` and `CLAUDE.md` with concrete file paths:
+9. Update agent context files if they already exist:
     - Update "Files to Modify" with actual files to change
     - Update "Files to Create" with new files to add
     - Update "Reference Implementations" with similar code patterns found
     - Add feature-specific code patterns from decisions.md
     - Update "Don't" rules based on decisions made
 
-**Output**: Report paths to all generated files (including decisions.md and updated AGENTS.md/CLAUDE.md) and a summary of decisions made.
+**Output**: Report paths to all generated files and a summary of decisions made.
 ```
 
 ---
@@ -365,9 +365,7 @@ Present plan summary and wait for user approval:
 - data-model.md: [N] entities defined
 - plan.md: Complete technical plan
 - quickstart.md: Testing procedures
-- AGENTS.md: Updated with concrete file paths
-- CLAUDE.md: Updated with concrete file paths
-- CLAUDE.md: Updated with concrete file paths
+- Agent context file (if present): Updated with concrete file paths
 
 ### Architecture Summary
 - Project Structure: [summary]
@@ -450,9 +448,7 @@ Present final summary:
 | File | Status | Location | Purpose |
 |------|--------|----------|---------|
 | spec.md | Created | specs/[###-feature]/spec.md | Requirements & user stories |
-| AGENTS.md | Created | specs/[###-feature]/AGENTS.md | Feature-specific agent instructions |
-| CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Claude-specific agent instructions |
-| CLAUDE.md | Created | specs/[###-feature]/CLAUDE.md | Claude-specific agent instructions |
+| Agent context (optional) | Updated | specs/[###-feature]/... | Feature-specific agent instructions |
 | research.md | Created | specs/[###-feature]/research.md | Technical research findings |
 | decisions.md | Created | specs/[###-feature]/decisions.md | ADRs - the "why" behind decisions |
 | data-model.md | Created | specs/[###-feature]/data-model.md | Entity definitions |
@@ -610,4 +606,4 @@ AskUserQuestion({
 - **If user says "done" during interview**: Proceed to Checkpoint 1 with current spec
 - **If user rejects at checkpoint**: Allow edits or regeneration
 - **If a worker fails**: Report error and allow retry or manual intervention
-- **Use parallel workers** for codebase exploration (Phase 1) and artifact generation (Phase 3, 4) when supported; otherwise do sequential passes
+- **Use parallel workers** for codebase exploration (Phase 1) and artifact generation (Phase 3, 4). Codex and Claude Code support subagents; otherwise do sequential passes

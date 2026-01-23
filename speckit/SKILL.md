@@ -13,7 +13,7 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 
 ## Core artifacts
 
-- Keep specs in `specs/###-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, `decisions.md`, `research.md`, `data-model.md`, `quickstart.md`, `AGENTS.md`, `CLAUDE.md`, and optional `contracts/`.
+- Keep specs in `specs/###-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, `decisions.md`, `research.md`, `data-model.md`, `quickstart.md`, and optional `contracts/`.
 
 ## Workflow map
 
@@ -32,7 +32,7 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 ## Adaptations for Platform Capabilities
 
 - If the platform has a structured question tool (Claude: AskUserQuestion, OpenCode: question), use it; Codex should ask in chat with 1–2 questions at a time, preserving the constraints in the reference.
-- If the platform supports parallel agents/workers, use them; otherwise do sequential passes and keep outputs distinct to simulate multi-agent separation.
+- Codex and Claude Code support subagents. Always use parallel agents for the initial codebase exploration to build comprehensive context; if parallel agents are unavailable, do sequential passes and keep outputs distinct to simulate multi-agent separation.
 - When a reference says "use browser automation", use the available tool(s) or skip if not required.
 - Keep all file writes local; do not use external services unless requested.
 
