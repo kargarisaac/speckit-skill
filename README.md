@@ -4,10 +4,9 @@ Build high-quality software faster with a specification-first workflow. Speckit 
 
 ## What You Get
 
-- Spec-first flow: clarify → plan → tasks → implement
+- Spec-first flow: spec → decisions → plan → tasks → implement
 - ADRs (`decisions.md`) to capture the "why"
-- Progress tracking in `tasks.md` for session continuity
-- Quality analysis and checklists for spec readiness
+- Four core artifacts per feature (`spec.md`, `decisions.md`, `plan.md`, `tasks.md`)
 
 ## Install the Skill
 
@@ -26,28 +25,25 @@ For other tools (opencode, etc.), place `speckit/` in their supported skills dir
 ## Usage
 
 ```text
-Use speckit sdd-flow for: Add user authentication with OAuth2
+Use speckit new Add user authentication with OAuth2
 ```
 
-Implementation is sequential by default:
+Update artifacts individually:
 
 ```text
-Use speckit build for specs/001-user-auth/
+Use speckit spec specs/001-user-auth/
+Use speckit plan specs/001-user-auth/
+Use speckit tasks specs/001-user-auth/
+Use speckit implement specs/001-user-auth/
 ```
-
-Feature context is updated in existing agent context files (if present).
 
 ## Command Index
 
-- `sdd-flow "description"` — complete workflow
-- `speckit.specify` — create spec
-- `speckit.clarify` — resolve ambiguities
-- `speckit.plan` — generate implementation plan
-- `speckit.tasks` — generate tasks
-- `build` — execute implementation phase-by-phase (parallel workers supported in Codex and Claude Code)
-- `speckit.analyze` — cross-artifact analysis
-- `speckit.checklist` — requirements quality checklist
-- `speckit.taskstoissues` — GitHub issues from tasks
+- `new <feature description>` — create feature folder, spec, decisions, plan, tasks
+- `spec <feature folder>` — update spec only (questions allowed here only)
+- `plan <feature folder>` — update decisions + plan (no questions)
+- `tasks <feature folder>` — update tasks only (no questions)
+- `implement <feature folder>` — implement tasks in order, mark `[x]`
 
 ## Output Structure
 
@@ -56,13 +52,9 @@ your-project/
 ├── specs/
 │   └── ###-feature-name/
 │       ├── spec.md
-│       ├── plan.md
-│       ├── tasks.md
 │       ├── decisions.md
-│       ├── research.md
-│       ├── data-model.md
-│       ├── quickstart.md
-└── (optional) existing agent context files updated if present
+│       ├── plan.md
+│       └── tasks.md
 ```
 
 ## License

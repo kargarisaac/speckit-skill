@@ -1,54 +1,42 @@
 ---
 name: speckit
-description: Spec-driven development workflow (Speckit) for generating and maintaining feature specs, plans, tasks, checklists, and implementation guidance in repos that use specs/###-feature directories. Use when requests mention sdd-flow or speckit commands (specify, clarify, plan, tasks, implement, analyze, checklist, taskstoissues) or ask for spec-first planning and build orchestration.
+description: Spec-driven development workflow (Speckit) for generating and maintaining specs, decisions, plans, tasks, and implementation guidance in repos that use specs/###-feature directories.
 ---
 
 # Speckit spec-driven development
 
+## Single command file
+
+- The ONLY command file is `speckit/speckit.md`.
+- All command routing and rules live there.
+
+## Subcommands
+
+- `new <feature description>` (default when no subcommand provided)
+- `spec <feature folder>`
+- `plan <feature folder>`
+- `tasks <feature folder>`
+- `implement <feature folder>`
+
+## Question policy (strict)
+
+- Ask questions only at the start and only for `spec.md`.
+- Ask up to 5 questions total, all at once.
+- After `spec.md` is written, do not ask more questions.
+
 ## Set the skill root
 
-- Resolve the repo root (use `git rev-parse --show-toplevel` or the current working directory).
-- Set `SPECKIT_ROOT` to the absolute path of the `speckit/` folder so scripts and templates resolve.
-- Use `scripts/` and `assets/templates/` from this skill directory.
-
-## Core artifacts
-
-- Keep specs in `specs/###-feature-name/` with `spec.md`, `plan.md`, `tasks.md`, `decisions.md`, `research.md`, `data-model.md`, `quickstart.md`, and optional `contracts/`.
-
-## Workflow map
-
-- For a single-command workflow request, follow `references/sdd-flow.md`.
-- For individual phases, follow:
-  - `references/speckit.specify.md`
-  - `references/speckit.clarify.md`
-  - `references/speckit.plan.md`
-  - `references/speckit.tasks.md`
-  - `references/speckit.analyze.md`
-  - `references/speckit.checklist.md`
-  - `references/speckit.implement.md`
-  - `references/build.md`
-  - `references/speckit.taskstoissues.md`
-
-## Adaptations for Platform Capabilities
-
-- If the platform has a structured question tool (Claude: AskUserQuestion, OpenCode: question), use it; Codex should ask in chat with 1–2 questions at a time, preserving the constraints in the reference.
-- Codex and Claude Code support subagents. Always use parallel agents for the initial codebase exploration to build comprehensive context; if parallel agents are unavailable, do sequential passes and keep outputs distinct to simulate multi-agent separation.
-- When a reference says "use browser automation", use the available tool(s) or skip if not required.
-- Keep all file writes local; do not use external services unless requested.
+- Resolve repo root and set `SPECKIT_ROOT` to the absolute path of `speckit/`.
+- Use `scripts/` and `assets/templates/` from this directory.
 
 ## Scripts
 
-- Use `scripts/create-new-feature.sh` to create the specs directory and feature branch, following the numbering and short-name rules in the references.
-- Use `scripts/check-prerequisites.sh` and `scripts/setup-plan.sh` to locate feature paths and ensure templates.
-- Use `scripts/update-agent-context.sh` only when updating agent context files is requested; do not modify unrelated agent files.
+- Use `scripts/create-new-feature.sh` to create the feature folder and the four artifacts.
 
 ## Templates
 
-- Use `assets/templates/spec-template.md`, `plan-template.md`, `tasks-template.md`, `decisions-template.md`, `checklist-template.md`, `feature-agents-template.md`, and `agent-file-template.md` as scaffolding.
-- Do not modify template content unless the user explicitly asks to change the workflow.
-
-## Output expectations
-
-- Maintain progress updates in `tasks.md` exactly as defined in the references.
-- Keep requirements testable and technology-agnostic in `spec.md`.
-- Keep decisions traceable via ADRs in `decisions.md`.
+- Only these templates are used:
+  - `assets/templates/spec-template.md`
+  - `assets/templates/decisions-template.md`
+  - `assets/templates/plan-template.md`
+  - `assets/templates/tasks-template.md`

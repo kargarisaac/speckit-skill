@@ -160,6 +160,10 @@ clean_branch_name() {
 # were initialised with --no-git.
 SCRIPT_DIR="$(CDPATH="" cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+if [ -z "${SPECKIT_ROOT:-}" ]; then
+    SPECKIT_ROOT="$(CDPATH="" cd "$SCRIPT_DIR/.." && pwd)"
+fi
+
 if git rev-parse --show-toplevel >/dev/null 2>&1; then
     REPO_ROOT=$(git rev-parse --show-toplevel)
     HAS_GIT=true
@@ -280,18 +284,33 @@ fi
 FEATURE_DIR="$SPECS_DIR/$BRANCH_NAME"
 mkdir -p "$FEATURE_DIR"
 
-TEMPLATE="${SPECKIT_ROOT}/assets/templates/spec-template.md"
 SPEC_FILE="$FEATURE_DIR/spec.md"
-if [ -f "$TEMPLATE" ]; then cp "$TEMPLATE" "$SPEC_FILE"; else touch "$SPEC_FILE"; fi
+DECISIONS_FILE="$FEATURE_DIR/decisions.md"
+PLAN_FILE="$FEATURE_DIR/plan.md"
+TASKS_FILE="$FEATURE_DIR/tasks.md"
+
+SPEC_TEMPLATE="${SPECKIT_ROOT}/assets/templates/spec-template.md"
+DECISIONS_TEMPLATE="${SPECKIT_ROOT}/assets/templates/decisions-template.md"
+PLAN_TEMPLATE="${SPECKIT_ROOT}/assets/templates/plan-template.md"
+TASKS_TEMPLATE="${SPECKIT_ROOT}/assets/templates/tasks-template.md"
+
+if [ -f "$SPEC_TEMPLATE" ]; then cp "$SPEC_TEMPLATE" "$SPEC_FILE"; else touch "$SPEC_FILE"; fi
+if [ -f "$DECISIONS_TEMPLATE" ]; then cp "$DECISIONS_TEMPLATE" "$DECISIONS_FILE"; else touch "$DECISIONS_FILE"; fi
+if [ -f "$PLAN_TEMPLATE" ]; then cp "$PLAN_TEMPLATE" "$PLAN_FILE"; else touch "$PLAN_FILE"; fi
+if [ -f "$TASKS_TEMPLATE" ]; then cp "$TASKS_TEMPLATE" "$TASKS_FILE"; else touch "$TASKS_FILE"; fi
 
 # Set the SPECIFY_FEATURE environment variable for the current session
 export SPECIFY_FEATURE="$BRANCH_NAME"
 
 if $JSON_MODE; then
-    printf '{"BRANCH_NAME":"%s","SPEC_FILE":"%s","FEATURE_NUM":"%s"}\n' "$BRANCH_NAME" "$SPEC_FILE" "$FEATURE_NUM"
+    printf '{"BRANCH_NAME":"%s","FEATURE_DIR":"%s","SPEC_FILE":"%s","DECISIONS_FILE":"%s","PLAN_FILE":"%s","TASKS_FILE":"%s"}\n' \
+        "$BRANCH_NAME" "$FEATURE_DIR" "$SPEC_FILE" "$DECISIONS_FILE" "$PLAN_FILE" "$TASKS_FILE"
 else
     echo "BRANCH_NAME: $BRANCH_NAME"
+    echo "FEATURE_DIR: $FEATURE_DIR"
     echo "SPEC_FILE: $SPEC_FILE"
-    echo "FEATURE_NUM: $FEATURE_NUM"
+    echo "DECISIONS_FILE: $DECISIONS_FILE"
+    echo "PLAN_FILE: $PLAN_FILE"
+    echo "TASKS_FILE: $TASKS_FILE"
     echo "SPECIFY_FEATURE environment variable set to: $BRANCH_NAME"
 fi

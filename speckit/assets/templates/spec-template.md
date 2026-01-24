@@ -1,115 +1,74 @@
-# Feature Specification: [FEATURE NAME]
+# Feature Spec: [FEATURE NAME]
 
 **Feature Branch**: `[###-feature-name]`  
 **Created**: [DATE]  
-**Status**: Draft  
 **Input**: User description: "$ARGUMENTS"
 
-## User Scenarios & Testing *(mandatory)*
+## Problem Statement
 
-<!--
-  IMPORTANT: User stories should be PRIORITIZED as user journeys ordered by importance.
-  Each user story/journey must be INDEPENDENTLY TESTABLE - meaning if you implement just ONE of them,
-  you should still have a viable MVP (Minimum Viable Product) that delivers value.
-  
-  Assign priorities (P1, P2, P3, etc.) to each story, where P1 is the most critical.
-  Think of each story as a standalone slice of functionality that can be:
-  - Developed independently
-  - Tested independently
-  - Deployed independently
-  - Demonstrated to users independently
--->
+[Why this matters. Concrete pain/goal.]
 
-### User Story 1 - [Brief Title] (Priority: P1)
+## Goals
 
-[Describe this user journey in plain language]
+- [Goal 1]
+- [Goal 2]
 
-**Why this priority**: [Explain the value and why it has this priority level]
+## Non-goals
 
-**Independent Test**: [Describe how this can be tested independently - e.g., "Can be fully tested by [specific action] and delivers [specific value]"]
+- [Out of scope]
+- [Out of scope]
 
-**Acceptance Scenarios**:
+## Primary User Flow (Happy Path)
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-2. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. [Step 1]
+2. [Step 2]
+3. [Step 3]
 
----
+## User Stories (prioritized)
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### P1 — [Story title]
 
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
+[Plain-language story]
 
 **Acceptance Scenarios**:
+1. **Given** [state], **When** [action], **Then** [outcome]
+2. **Given** [state], **When** [action], **Then** [outcome]
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+### P2 — [Story title]
 
----
-
-### User Story 3 - [Brief Title] (Priority: P3)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
+[Plain-language story]
 
 **Acceptance Scenarios**:
+1. **Given** [state], **When** [action], **Then** [outcome]
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+[Add up to 5 total stories]
 
----
+## Requirements
 
-[Add more user stories as needed, each with an assigned priority]
+### Functional
 
-### Edge Cases
+- **FR-001**: [Requirement]
+- **FR-002**: [Requirement]
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+### Non-functional
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+- **NFR-001**: [Requirement with measurable target]
+- **NFR-002**: [Requirement]
 
-## Requirements *(mandatory)*
+## Edge Cases
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
+- [Edge case 1]
+- [Edge case 2]
 
-### Functional Requirements
+## Success Criteria (measurable)
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+- **SC-001**: [Metric]
+- **SC-002**: [Metric]
 
-*Example of marking unclear requirements:*
+## Assumptions
 
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
+- [Assumption if info missing]
 
-### Key Entities *(include if feature involves data)*
+## Open Questions
 
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
-
-## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
-
-### Measurable Outcomes
-
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+- [Only if truly blocking; otherwise move to Assumptions]
