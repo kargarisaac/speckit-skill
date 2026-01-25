@@ -38,7 +38,7 @@ If `$ARGUMENTS` starts with a subcommand, run that flow. If `$ARGUMENTS` is just
 
 ### B) `spec <feature folder>`
 
-1. Ask up to 5 clarification questions (single message) ONLY for `spec.md`.
+1. Ask up to 5 clarification questions (single message) ONLY for `spec.md` if anything is unclear. Do not make assumptions and ask user feedback for anything unclear.
 2. Update only `spec.md`.
 3. Stop.
 
