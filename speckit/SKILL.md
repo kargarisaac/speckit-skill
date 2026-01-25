@@ -7,7 +7,7 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 
 ## Single command file
 
-- The ONLY command file is `speckit/speckit.md`.
+- The ONLY command file is `speckit.md`.
 - All command routing and rules live there.
 
 ## Subcommands
