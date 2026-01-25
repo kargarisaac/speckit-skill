@@ -10,6 +10,25 @@ Use this file for all Speckit commands. Do not reference any other command docs.
 - Use templates from `SPECKIT_ROOT/assets/templates/` and scripts from `SPECKIT_ROOT/scripts/`.
 - Ensure the repo has a top-level `specs/` folder; create it if missing.
 
+## Workflow (required)
+
+1. Resolve `SPECKIT_ROOT`, repo root, and ensure `specs/` exists.
+2. Run a comprehensive, feature-focused repo exploration to gather context.
+3. If clarification questions are needed, ask them (only for `spec.md`).
+4. After user answers, do any additional exploration required to fill gaps.
+5. Execute the subcommand flow and write the required artifacts.
+
+## Repo exploration (required)
+
+Run a targeted but comprehensive scan for context related to the feature, including:
+- relevant modules, routes, configs, schemas, API clients, tests
+- existing specs and feature folders
+- README/docs and architecture notes (secondary; verify against code)
+- adjacent features or similar implementations
+- build/deploy or feature-flag patterns if user-facing
+
+Exploration approach is up to the model; prioritize code over docs and explore as needed.
+
 ## Core artifacts (exactly four per feature)
 
 Feature folders live at `specs/###-slug/` and MUST contain only:

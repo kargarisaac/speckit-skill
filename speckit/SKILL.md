@@ -24,6 +24,19 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 - Ask up to 5 questions total, all at once.
 - After `spec.md` is written, do not ask more questions.
 
+## Workflow (high level)
+
+- Resolve `SPECKIT_ROOT` and ensure repo `specs/` exists.
+- Run a targeted repo exploration for the feature context.
+- Ask clarification questions (only if writing `spec.md`).
+- Generate/update artifacts per the selected subcommand.
+
+## Repo exploration
+
+- Do a comprehensive, feature-focused scan of relevant code and configs first.
+- Treat docs as secondary and verify against code when possible.
+- After user answers, perform additional exploration if needed to close gaps.
+
 ## Set the skill root
 
 - Set `SPECKIT_ROOT` to the absolute path of the Speckit skill folder.
