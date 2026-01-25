@@ -4,8 +4,11 @@ Use this file for all Speckit commands. Do not reference any other command docs.
 
 ## Setup
 
-- Resolve repo root and set `SPECKIT_ROOT` to the absolute path of `speckit/`.
-- Use templates from `assets/templates/` and scripts from `scripts/`.
+- Set `SPECKIT_ROOT` to the absolute path of the Speckit skill folder.
+- Prefer a repo-local `speckit/` at repo root if present.
+- Otherwise use the user-installed skill at `~/.codex/skills/speckit` (the folder containing this `speckit.md`).
+- Use templates from `SPECKIT_ROOT/assets/templates/` and scripts from `SPECKIT_ROOT/scripts/`.
+- Ensure the repo has a top-level `specs/` folder; create it if missing.
 
 ## Core artifacts (exactly four per feature)
 

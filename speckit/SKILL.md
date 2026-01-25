@@ -26,8 +26,11 @@ description: Spec-driven development workflow (Speckit) for generating and maint
 
 ## Set the skill root
 
-- Resolve repo root and set `SPECKIT_ROOT` to the absolute path of `speckit/`.
-- Use `scripts/` and `assets/templates/` from this directory.
+- Set `SPECKIT_ROOT` to the absolute path of the Speckit skill folder.
+- Prefer a repo-local `speckit/` at repo root if present.
+- Otherwise use the user-installed skill at `~/.codex/skills/speckit` (the folder containing this `SKILL.md`).
+- Use `scripts/` and `assets/templates/` from `SPECKIT_ROOT/`.
+- Ensure the repo has a top-level `specs/` folder; create it if missing.
 
 ## Scripts
 
